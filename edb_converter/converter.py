@@ -4,7 +4,7 @@ import math
 import ephem
 
 EXT = ".edb"
-PATH = "EDB/"
+PATH = "edb/"
 
 
 def get_lines(file_path):
