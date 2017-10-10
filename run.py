@@ -40,7 +40,7 @@ class MainHandler(tornado.web.RequestHandler):
         date_argument = str(self.get_argument("date", today_utc, strip=True))
         parsed_date = dateutil.parser.parse(date_argument)
         date = parsed_date.strftime("%Y/%m/%d %H:%M:%S")
-        print(date)
+
         lat = str(self.get_argument("lat", "41.015137", strip=True))
         lon = str(self.get_argument("lon", "28.979530", strip=True))
         elevation = int(self.get_argument("elevation", 0, strip=True))
