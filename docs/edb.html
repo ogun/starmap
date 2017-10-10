@@ -1,0 +1,1318 @@
+
+<!-- saved from url=(0037)https://www.mmto.org/obscats/edb.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>EDB File format documentation</title>
+<style type="text/css">
+:root #header + #content > #left > #rlblock_left
+{ display: none !important; }</style></head>
+<body>
+
+<h3>Our collection of EDB catalogs</h3>
+<a name="edb_format"></a>
+The MMT mount computer is now able to use XEphem format database files.
+(See the end of this page for details on the EDB format).
+These are most useful (at the MMT) for tracking non-sidereal objects
+such as planets, comets, minor planets, earth-orbiting satellites, and
+the like.
+Edb format catalogs can certainly be used for stellar objects,
+but most users prepare such catalogs in the
+<a href="https://www.mmto.org/obscats">MMT sidereal format</a>.
+
+<p>
+The MMT uses (by permission) code derived from
+<a href="http://www.clearskyinstitute.com/xephem">XEphem</a>
+to parse these files and generate coordinates.
+
+</p><p>
+At the MMT, we regularly update and maintain the following catalogs in edb
+format.  
+
+</p><p>
+The
+<a href="ftp://ftp.lowell.edu/pub/elgb/astorb_landmarks.html">Lowell Observatory</a>
+catalogs provide elements for the roughly 30,000 asteroids in ASTORB,
+and also includes some 237215 orbits from the Harvard/CFA Minor Planet Center.
+<br>
+These catalogs are fetched and converted daily.
+
+</p><ul>
+<li> AstLowell.edb &nbsp;&nbsp; (3919 bright minor planets)
+</li><li> AstLowell_dim.edb &nbsp;&nbsp; (316509 asteroids, never brighter than 13)
+</li></ul>
+
+<p>
+The MPC catalogs are obtained from the
+<a href="http://cfa-www.harvard.edu/iau/MPCORB.html">Harvard/CFA Minor Planet circulars (MPCORB)</a>.
+<br>
+These catalogs are fetched and converted daily.
+
+</p><ul>
+<li> AstMPC.edb &nbsp;&nbsp; (3684 bright asteroids)
+</li><li> AstMPC_dim.edb &nbsp;&nbsp; (278171 minor planets, never brighter than 13)
+</li></ul>
+
+<p>
+The following catalogs are derived from the
+<a href="http://ssd.jpl.nasa.gov/sb_elem.html">JPL DASTCOM</a>
+database, which is provided by the
+<a href="http://ssd.jpl.nasa.gov/horizons.html">JPL HORIZONS</a>
+System.
+<br>
+These catalogs are fetched and converted daily.
+
+</p><ul>
+<li> JPLComet.edb &nbsp;&nbsp; (2292 Comets)
+</li><li> JPLNumAst.edb &nbsp;&nbsp; (120437 named or numbered asteroids)
+</li><li> JPLUnNumAst.edb &nbsp;&nbsp; (194272 unnumbered asteroids)
+</li></ul>
+
+<p>
+We obtain 5 catalogs from the Center for Astrophysics at Harvard
+University, amazingly they provide these in EDB format.
+
+</p><ul>
+<li> Soft03Cmt.edb &nbsp;&nbsp; (190 or so 
+<a href="http://cfa-www.harvard.edu/iau/Ephemerides/Comets">
+observable comets</a>)
+</li><li> Soft03CritList.edb &nbsp;&nbsp; (68 or so
+<a href="http://cfa-www.harvard.edu/iau/Ephemerides/CritList">
+observable critical list minor planets</a>)
+</li><li> Soft03Distant.edb &nbsp;&nbsp; (680 
+<a href="http://cfa-www.harvard.edu/iau/Ephemerides/Distant">
+observable distant minor planets</a>)
+</li><li> Soft03Unusual.edb &nbsp;&nbsp; (642
+<a href="http://cfa-www.harvard.edu/iau/Ephemerides/Unusual">
+observable unusual minor planets</a>)
+</li><li> Soft03Bright.edb &nbsp;&nbsp; (55 
+<a href="http://cfa-www.harvard.edu/iau/Ephemerides/Bright/2005">
+bright minor planets</a>)
+</li></ul>
+
+
+<p>
+The following catalogs provide orbital elements for major planets and
+some earth orbiting satellites.
+<br>
+Note that orbital elements for earth
+orbiting satellites are unlikely to be useful unless recently updated.
+
+</p><ul>
+<li> planets.edb &nbsp;&nbsp; (sun, moon, major planets and satellites)
+</li><li> stations.edb &nbsp;&nbsp; (3 earth orbiting science stations)
+</li><li> science.edb &nbsp;&nbsp; (62 earth orbiting satellites)
+</li><li> visual.tle &nbsp;&nbsp; (125 earth orbiting satellites)
+</li></ul>
+
+<h3><a class="mozTocH1" name="mozTocId468501"></a> The EDB File format</h3>
+This document describes the format of an XEphem database file. The
+file name extension is .edb.
+<br>
+See the <a href="https://www.mmto.org/obscats/tle.html">TLE document</a>
+for files containing two-line Earth satellite elements.<br>
+<h4><a class="mozTocH4" name="mozTocId800642"></a>
+<b>General format rules<br>
+</b></h4>
+<ul>
+  <li>Each object occupies one line in the file.</li>
+  <li>The order of objects in a file does not matter.</li>
+  <li>Lines beginning with anything other than a-z, A-Z or 0-9 are
+ignored and may be used for comments.</li>
+  <li>Lines are separated into Fields using commas (,).</li>
+  <li>Fields may be further subdivided into Subfields with vertical
+bars (|).</li>
+  <li>All date fields may be in either of two forms:</li>
+</ul>
+<blockquote>
+  <ol>
+    <li>month/day/year, where day may contain a fractional portion.
+examples: 1/1/1993 and 1/1.234/1993 . Note the format of dates in
+database files is always M/D/Y; or<br>
+      <br>
+    </li>
+    <li>the year as real number as indicated by the presence of a
+decimal point, such as 1993.123.<br>
+    </li>
+  </ol>
+</blockquote>
+<h4><a class="mozTocH4" name="mozTocId215848"></a> <span style="font-weight: bold;">Format Details</span></h4>
+<div style="margin-left: 40px;"> The first two fields are required and
+are always Name and Type. Remaining fields depend on Type. </div>
+<br>
+<table style="text-align: left; width: 95%; margin-left: 80px;" summary=".edb fields 1 and 2" cellpadding="2" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; width: 100px;"><span style="font-weight: bold;">Field 1</span><br>
+      </td>
+      <td style="vertical-align: top;">One or more object names, each
+separated by the Subfield separator, |. Any number of characters may be
+present in the file but only the first 20 characters of
+each name and only the first 20 names are actually used.<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; width: 100px;"><span style="font-weight: bold;">Field 2</span></td>
+      <td style="vertical-align: top;"> Type designation. Consists of a
+single letter designation from the following set (case <span style="font-style: italic;">is</span> significant):<br>
+      <table style="text-align: left; width: 95%;" summary="field 2" border="0" cellpadding="2" cellspacing="2">
+        <tbody>
+          <tr>
+            <td style="vertical-align: top; font-weight: bold;"> f<br>
+            </td>
+            <td style="vertical-align: top;">fixed (or at most exhibits
+constant curvilinear proper motion)</td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top; font-weight: bold;"> e<br>
+            </td>
+            <td style="vertical-align: top;">heliocentric elliptical
+orbit</td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top; font-weight: bold;"> h<br>
+            </td>
+            <td style="vertical-align: top;">heliocentric hyperbolic
+orbit</td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top; font-weight: bold;"> p<br>
+            </td>
+            <td style="vertical-align: top;">heliocentric parabolic
+orbit</td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top; font-weight: bold;"> E<br>
+            </td>
+            <td style="vertical-align: top;">geocentric elliptical
+orbit, <span style="font-style: italic;">i.e.</span>, Earth satellite</td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top; font-weight: bold;"> P<br>
+            </td>
+            <td style="vertical-align: top;">built-in planet or natural
+satellite name</td>
+          </tr>
+        </tbody>
+      </table>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<div style="margin-left: 40px;"> <span style="font-weight: normal;">If</span>
+<span style="font-weight: bold;">Field 2</span> <span style="font-weight: normal;"> is</span><span style="font-weight: bold;">
+f</span> <span style="font-weight: normal;"> the object is fixed and
+the
+following fields and subfields are defined:<br>
+<br>
+</span> </div>
+<div style="margin-left: 80px;">
+<table style="text-align: left; width: 95%;" summary="field 2" border="0" cellpadding="2" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; width: 100px;"><br>
+      </td>
+      <td style="vertical-align: top; width: 100px;"> <b>SubField 2A</b></td>
+      <td style="vertical-align: top;"> An optional SubField 2A can be
+added to further define an object class code, consisting of
+one character from the following list:<br>
+      <table style="text-align: left; width: 100%;" summary="subfield 2a" border="0" cellpadding="2" cellspacing="2">
+        <tbody>
+          <tr>
+            <td style="vertical-align: top; width: 20px;"> A<br>
+            </td>
+            <td style="vertical-align: top;">Cluster of galaxies</td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top; width: 20px;"> B<br>
+            </td>
+            <td style="vertical-align: top;">Star, binary. Deprecated
+as of version 3.6, gets turned into D internally. Use Field 2
+type <b>B </b>if more than one position angle and separation or
+orbital elements are
+known.<br>
+            </td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top; width: 20px;"> C<br>
+            </td>
+            <td style="vertical-align: top;">Cluster, globular</td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top; width: 20px;"> D<br>
+            </td>
+            <td style="vertical-align: top;">Star, visual double</td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top; width: 20px;"> F<br>
+            </td>
+            <td style="vertical-align: top;">Nebula, diffuse</td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top; width: 20px;"> G<br>
+            </td>
+            <td style="vertical-align: top;">Galaxy, spiral</td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top; width: 20px;"> H<br>
+            </td>
+            <td style="vertical-align: top;">Galaxy, spherical</td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top; width: 20px;"> J<br>
+            </td>
+            <td style="vertical-align: top;">Radio</td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top; width: 20px;"> K<br>
+            </td>
+            <td style="vertical-align: top;">Nebula, dark</td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top; width: 20px;"> L<br>
+            </td>
+            <td style="vertical-align: top;">Pulsar</td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top; width: 20px;"> M<br>
+            </td>
+            <td style="vertical-align: top;">Star, multiple</td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top; width: 20px;"> N<br>
+            </td>
+            <td style="vertical-align: top;">Nebula, bright</td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top; width: 20px;"> O<br>
+            </td>
+            <td style="vertical-align: top;">Cluster, open</td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top; width: 20px;"> P<br>
+            </td>
+            <td style="vertical-align: top;">Nebula, planetary</td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top; width: 20px;"> Q<br>
+            </td>
+            <td style="vertical-align: top;">Quasar</td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top; width: 20px;"> R<br>
+            </td>
+            <td style="vertical-align: top;">Supernova remnant</td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top; width: 20px;"> S<br>
+            </td>
+            <td style="vertical-align: top;">Star</td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top; width: 20px;"> T<br>
+            </td>
+            <td style="vertical-align: top;">Stellar object</td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top; width: 20px;"> U<br>
+            </td>
+            <td style="vertical-align: top;">Cluster, with nebulosity</td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top;">Y<br>
+            </td>
+            <td style="vertical-align: top;">Supernova<br>
+            </td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top; width: 20px;"> V<br>
+            </td>
+            <td style="vertical-align: top;">Star, variable</td>
+          </tr>
+        </tbody>
+      </table>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; width: 100px;"><br>
+      </td>
+      <td style="vertical-align: top; width: 100px;"> <b>SubField 2B</b></td>
+      <td style="vertical-align: top;">If SubField 2A is one of T, B,
+D, S or V, optional SubField 2B may consist of up to two spectral
+designation characters, typically one letter followed by one numerical
+subclass designator. Two examples are O and G3.</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;">If SubField 2A is any other
+class code, optional SubField 2B may consist of up to two additional
+characters to further describe the type.<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; width: 100px;"><b>Field 3</b></td>
+      <td colspan="2" rowspan="1" style="vertical-align: top;"> RA
+position coordinate, given as H:M:S.</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; width: 100px;"><br>
+      </td>
+      <td style="vertical-align: top; width: 100px;"> <span style="font-weight: bold;">SubField 3A</span></td>
+      <td style="vertical-align: top;">This optional subfield may
+specify a proper motion in RA. It is in milliarcseconds per
+year on the sky, <span style="font-style: italic;">i.e.</span>, <span style="font-family: monospace;">ΔRA*cos(dec)</span>.</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; width: 100px;"><b>Field 4</b></td>
+      <td colspan="2" rowspan="1" style="vertical-align: top;">Declination
+position coordinate, given as D:M:S.</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; width: 100px;"><br>
+      </td>
+      <td style="vertical-align: top; width: 100px;"> <b>SubField 4A</b></td>
+      <td style="vertical-align: top;">This optional subfield may
+specify a proper motion in Dec. It is in milliarcseconds per
+year on the sky</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold; width: 100px;">Field
+5<br>
+      </td>
+      <td colspan="2" rowspan="1" style="vertical-align: top;">Magnitude
+of the object.</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold; width: 100px;">Field
+6<br>
+      </td>
+      <td colspan="2" rowspan="1" style="vertical-align: top;"> This
+optional field is the reference epoch. It is assumed to be
+2000 if absent</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div style="margin-left: 40px;">
+<div style="margin-left: 40px;"> <b><br>
+</b><br>
+<table style="text-align: left; width: 95%;" summary="field" border="0" cellpadding="2" cellspacing="2">
+  <tbody>
+    <tr>
+      <td colspan="3" rowspan="1" style="vertical-align: top;"><span style="font-weight: bold;">Field 7</span> depends on SubField 2A</td>
+    </tr>
+    <tr>
+      <td colspan="3" rowspan="1" style="vertical-align: top; width: 100px;">If SubField 2A is <span style="font-weight: bold;">G</span>
+or <span style="font-weight: bold;">H</span></td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">Field
+7</span><br>
+      </td>
+      <td colspan="2" rowspan="1" style="vertical-align: top;">Galaxy
+major axis, in arcseconds</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; width: 100px;"><br>
+      </td>
+      <td style="vertical-align: top; width: 100px;"> <b>SubField 7A</b></td>
+      <td style="vertical-align: top;">Galaxy minor axis, in arcseconds</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; width: 100px;"><br>
+      </td>
+      <td style="vertical-align: top; width: 100px;"> <b>SubField 7B</b></td>
+      <td style="vertical-align: top;">Major axis position angle, in
+degrees East of North</td>
+    </tr>
+    <tr>
+      <td colspan="3" rowspan="1" style="vertical-align: top; width: 100px;">If Subfield 2A is <span style="font-weight: bold;">B</span>
+or <span style="font-weight: bold;">D</span></td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">Field
+7</span></td>
+      <td colspan="2" rowspan="1" style="vertical-align: top;">star
+pair separation, in arcseconds<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; width: 100px;"><br>
+      </td>
+      <td style="vertical-align: top; width: 100px;"> <b>SubField 7A</b></td>
+      <td style="vertical-align: top;">reserved, set to 0</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; width: 100px;"><br>
+      </td>
+      <td style="vertical-align: top; width: 100px;"> <b>SubField 7B</b></td>
+      <td style="vertical-align: top;">position angle, in degrees East
+of North</td>
+    </tr>
+    <tr>
+      <td colspan="3" rowspan="1" style="vertical-align: top; width: 100px;">Otherwise Field 7 is
+optional but if present</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">Field
+7</span></td>
+      <td colspan="2" rowspan="1" style="vertical-align: top;">size of
+the object, in arcseconds. It is assumed to be 0 if absent.</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+<br>
+<div style="margin-left: 40px;"> <span style="font-weight: normal;">If</span>
+<span style="font-weight: bold;">Field 2</span> <span style="font-weight: normal;"> is</span><span style="font-weight: bold;">
+B</span> <span style="font-weight: normal;"> the object is a true
+binary pair and
+the
+following fields and subfields are defined.<br>
+<br>
+</span> </div>
+<div style="margin-left: 80px;">
+<table style="text-align: left; width: 95%;" summary="field 2" border="0" cellpadding="2" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; width: 100px;"><br>
+      </td>
+      <td style="vertical-align: top; width: 100px;"> <b>SubField 2A</b></td>
+      <td style="vertical-align: top;"> An optional SubField 2A can be
+added to further define an binary class code, consisting of
+one character from the following list. This scheme is taken from the
+Washington Multiplicity catalog for compliance with the IAU 2003
+recommendation.<br>
+      <table style="text-align: left; width: 100%;" summary="subfield 2a" border="0" cellpadding="2" cellspacing="2">
+        <tbody>
+          <tr>
+            <td style="vertical-align: top; width: 20px;"> a<br>
+            </td>
+            <td style="vertical-align: top;">Astrometric binary<br>
+            </td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top; width: 20px;"> c<br>
+            </td>
+            <td style="vertical-align: top;">Cataclysmic variable<br>
+            </td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top; width: 20px;"> e<br>
+            </td>
+            <td style="vertical-align: top;">Eclipsing binary<br>
+            </td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top; width: 20px;"> x<br>
+            </td>
+            <td style="vertical-align: top;">High-mass X-ray binary<br>
+            </td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top; width: 20px;"> y<br>
+            </td>
+            <td style="vertical-align: top;">Low-mass X-ray binary<br>
+            </td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top; width: 20px;"> o<br>
+            </td>
+            <td style="vertical-align: top;">Occultation binary<br>
+            </td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top; width: 20px;"> s<br>
+            </td>
+            <td style="vertical-align: top;">Spectroscopic binary<br>
+            </td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top; width: 20px;"> t<br>
+            </td>
+            <td style="vertical-align: top;">Single-line spectroscopic
+binary<br>
+            </td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top; width: 20px;"> u<br>
+            </td>
+            <td style="vertical-align: top;">Double-line spectroscopic
+binary<br>
+            </td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top; width: 20px;"> v<br>
+            </td>
+            <td style="vertical-align: top;">Spectrum binary<br>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top">b<br>
+            </td>
+            <td valign="top">Visual binary<br>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top">d<br>
+            </td>
+            <td valign="top">Visual binary with common proper motion<br>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top">q<br>
+            </td>
+            <td valign="top">Visual binary - optical<br>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top">r<br>
+            </td>
+            <td valign="top">Visual binary - physical<br>
+            </td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top; width: 20px;"> p<br>
+            </td>
+            <td style="vertical-align: top;">Exoplanet<br>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; width: 100px;"><br>
+      </td>
+      <td style="vertical-align: top; width: 100px;"> <b>SubField 2B</b></td>
+      <td style="vertical-align: top;">Up to two characters to specify
+the spectral class of the primary star, typically one letter followed
+by one numerical subclass designator. Two examples are O and G3.</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><b>SubField 2C</b> </td>
+      <td style="vertical-align: top;">Up to two characters to specify
+the spectral class of the secondary star,
+typically one letter followed by one numerical subclass designator.
+Two examples are O and G3. </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; width: 100px;"><b>Field 3</b></td>
+      <td colspan="2" rowspan="1" style="vertical-align: top;"> RA
+position coordinate, given as H:M:S.</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; width: 100px;"><br>
+      </td>
+      <td style="vertical-align: top; width: 100px;"> <span style="font-weight: bold;">SubField 3A</span></td>
+      <td style="vertical-align: top;">This optional subfield may
+specify a proper motion in RA. It is in milliarcseconds per
+year on the sky, <span style="font-style: italic;">i.e.</span>, <span style="font-family: monospace;">ΔRA*cos(dec)</span>.</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; width: 100px;"><b>Field 4</b></td>
+      <td colspan="2" rowspan="1" style="vertical-align: top;">Declination
+position coordinate, given as D:M:S.</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; width: 100px;"><br>
+      </td>
+      <td style="vertical-align: top; width: 100px;"> <b>SubField 4A</b></td>
+      <td style="vertical-align: top;">This optional subfield may
+specify a proper motion in Dec. It is in milliarcseconds per
+year on the sky</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold; width: 100px;">Field
+5<br>
+      </td>
+      <td colspan="2" rowspan="1" style="vertical-align: top;">Magnitude
+of each star in the pair.</td>
+    </tr>
+    <tr>
+      <td valign="top"><br>
+      </td>
+      <td valign="top"><b>SubField 5A</b><br>
+      </td>
+      <td valign="top">Magnitude of the primary star<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top"><br>
+      </td>
+      <td valign="top"><b>SubField 5B</b><br>
+      </td>
+      <td valign="top">Magnitude of the secondary star<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold; width: 100px;">Field
+6<br>
+      </td>
+      <td colspan="2" rowspan="1" style="vertical-align: top;"> This
+optional field is the reference equinox year. It is assumed to be
+2000 if absent</td>
+    </tr>
+    <tr>
+      <td valign="top"><b>Field 7</b><br>
+      </td>
+      <td colspan="2" rowspan="1" valign="top">This field may contain
+either 3 or 6 subfields (one or two triples of year/separation/position
+angle)
+or 7 subfields (orbital elements).<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top"><br>
+      </td>
+      <td colspan="2" rowspan="1" valign="top">If 3 or 6 subfields,
+they define positions grouped as the following triplets:<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top"><br>
+      </td>
+      <td valign="top"><b>SubField 7A/D</b></td>
+      <td valign="top">Year of the separation and position angle given
+in the next two fields, decimal year or month/day/year </td>
+    </tr>
+    <tr>
+      <td valign="top"><br>
+      </td>
+      <td valign="top"><b>SubField 7B/E</b></td>
+      <td valign="top">Separation, arc seconds<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top"><br>
+      </td>
+      <td valign="top"><b>SubField 7C/F</b></td>
+      <td valign="top">Position angle, degrees E of N, referenced to
+equinox in field 6<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top"><br>
+      </td>
+      <td colspan="2" rowspan="1" valign="top">If 7 subfields, they
+define a
+true orbit:<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top"><br>
+      </td>
+      <td valign="top"><b>SubField 7A</b><br>
+      </td>
+      <td valign="top">Semi-major axis, arcseconds<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top"><br>
+      </td>
+      <td valign="top"><b>SubField 7B</b></td>
+      <td valign="top">Inclination from plane of sky, degrees<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top"><br>
+      </td>
+      <td valign="top"><b>SubField 7C</b></td>
+      <td valign="top">Longitude of node, degrees<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top"><br>
+      </td>
+      <td valign="top"><b>SubField 7D</b></td>
+      <td valign="top">Eccentricity<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top"><br>
+      </td>
+      <td valign="top"><b>SubField 7E</b></td>
+      <td valign="top">Epoch of periastron, decimal year or
+month/day/year<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top"><br>
+      </td>
+      <td valign="top"><b>SubField 7F</b></td>
+      <td valign="top">Argument of periastron, degrees<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top"><br>
+      </td>
+      <td valign="top"><b>SubField 7G</b></td>
+      <td valign="top">Period. Units are designated by suffix <b>y</b>
+for years, <b>d</b> for days, or <b>h</b> for hours. If no
+designation the default is years.<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left: 40px;"> If <span style="font-weight: bold;">Field
+2</span> is <span style="font-weight: bold;">e</span> the object type
+is
+elliptical heliocentric (eccentricity &lt; 1) and the remaining fields
+are defined as follows: </div>
+<br>
+<div style="margin-left: 40px;">
+<div style="margin-left: 40px;">
+<table style="text-align: left; width: 95%;" summary="elliptical fields" border="0" cellpadding="2" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; width: 100px; font-weight: bold;">Field
+3<br>
+      </td>
+      <td colspan="2" rowspan="1" style="vertical-align: top;">i =
+inclination, degrees</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; width: 100px; font-weight: bold;">Field
+4<br>
+      </td>
+      <td colspan="2" rowspan="1" style="vertical-align: top;">O =
+longitude of ascending node, degrees</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; width: 100px; font-weight: bold;">Field
+5<br>
+      </td>
+      <td colspan="2" rowspan="1" style="vertical-align: top;">o =
+argument of perihelion, degrees</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; width: 100px; font-weight: bold;">Field
+6<br>
+      </td>
+      <td colspan="2" rowspan="1" style="vertical-align: top;">a = mean
+distance (aka semi-major axis), AU</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; width: 100px; font-weight: bold;">Field
+7<br>
+      </td>
+      <td colspan="2" rowspan="1" style="vertical-align: top;">n = mean
+daily motion, degrees per day (computed from a**3/2 if
+omitted)</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; width: 100px; font-weight: bold;">Field
+8<br>
+      </td>
+      <td colspan="2" rowspan="1" style="vertical-align: top;">e =
+eccentricity, must be &lt; 1<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; width: 100px; font-weight: bold;">Field
+9<br>
+      </td>
+      <td colspan="2" style="vertical-align: top;">M = mean anomaly,
+i.e., degrees from perihelion</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; width: 100px; font-weight: bold;">Field
+10<br>
+      </td>
+      <td colspan="2" style="vertical-align: top;">E = epoch date,
+i.e., time of M</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top; width: 100px;"><b>SubField 10A</b></td>
+      <td style="vertical-align: top;">First date these elements are
+valid, optional<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top; width: 100px;"><b>SubField 10B</b></td>
+      <td style="vertical-align: top;">Last date these elements are
+valid, optional<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; width: 100px; font-weight: bold;">Field
+11<br>
+      </td>
+      <td colspan="2" style="vertical-align: top;">D = the equinox
+year, i.e., time of i, O and o</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; width: 100px; font-weight: bold;">Field
+12<br>
+      </td>
+      <td colspan="2" style="vertical-align: top;">First component of
+magnitude model, either g from (g,k) or
+H from (H,G). Specify which by preceding the number with a "g"
+or an "H". In absence of either specifier the default is (H,G) model.
+See <a href="https://www.mmto.org/obscats/edb.html#mag_models">Magnitude models</a>.</td>
+    </tr>
+    <tr>
+      <td valign="top"><b>Field 13</b><br>
+      </td>
+      <td colspan="2" rowspan="1" valign="top">Second component of
+magnitude model, either k or G<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top"><b>Field 14</b><br>
+      </td>
+      <td colspan="2" rowspan="1" valign="top">s =
+angular size at 1 AU, arc seconds, optional</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div style="margin-left: 40px;"> <span style="font-weight: bold;"><br>
+</span> </div>
+</div>
+<div style="margin-left: 80px;"> You may have other parameters
+available
+for elliptical orbits that can be converted into these. The
+following relationships might be useful:<br>
+<br>
+<div style="margin-left: 40px;"> <span style="font-family: monospace;">P
+= sqrt(a*a*a)<br>
+p = O + o<br>
+n = 0.9856076686/P<br>
+T = E - M/n<br>
+q = a*(1-e)</span><br>
+AU = 149,597,870 km = 92,955,621 U.S. statute miles<br>
+<br>
+where<br>
+<br>
+<span style="font-family: monospace;">P</span> = the orbital period,
+years;<br>
+<span style="font-family: monospace;">p</span> = longitude of
+perihelion, degrees<br>
+<span style="font-family: monospace;">T</span> = epoch of perihelion
+(add multiples of P for desired range)<br>
+<span style="font-family: monospace;">q</span> = perihelion distance, AU<br>
+<br>
+Note that if you know T you can then set E = T and M = 0. </div>
+</div>
+<br>
+<div style="margin-left: 40px;"> If <span style="font-weight: bold;">Field
+2</span> is <span style="font-weight: bold;">h</span> the object type
+is
+hyperbolic heliocentric (eccentricity &gt; 1) and the remaining fields
+are defined as follows:<br>
+<br>
+<div style="margin-left: 40px;">
+<table style="text-align: left; width: 95%;" summary="hyperbolic fields" border="0" cellpadding="2" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold; width: 100px;">Field
+3<br>
+      </td>
+      <td colspan="2" rowspan="1" style="vertical-align: top;">T = date
+of the epoch of perihelion</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top; width: 100px;"><b>SubField 3A</b></td>
+      <td style="vertical-align: top;">First date these elements are
+valid, optional</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top; width: 100px;"><b>SubField 3B</b></td>
+      <td style="vertical-align: top;">Last date these elements are
+valid, optional</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold; width: 100px;">Field
+4<br>
+      </td>
+      <td colspan="2" rowspan="1" style="vertical-align: top;">i =
+inclination of orbital plane to ecliptic, degrees</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold; width: 100px;">Field
+5<br>
+      </td>
+      <td colspan="2" rowspan="1" style="vertical-align: top;">O =
+longitude of ascending node, degrees</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold; width: 100px;">Field
+6<br>
+      </td>
+      <td colspan="2" rowspan="1" style="vertical-align: top;">o =
+argument of perihelion, degrees</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold; width: 100px;">Field
+7<br>
+      </td>
+      <td colspan="2" rowspan="1" style="vertical-align: top;">e =
+eccentricity, must be &gt; 1<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold; width: 100px;">Field
+8<br>
+      </td>
+      <td colspan="2" rowspan="1" style="vertical-align: top;">q =
+perihelion distance, AU</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold; width: 100px;">Field
+9<br>
+      </td>
+      <td colspan="2" rowspan="1" style="vertical-align: top;">D = the
+equinox year (i.e., time of i/O/o)</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold; width: 100px;">Field
+10<br>
+      </td>
+      <td colspan="2" rowspan="1" style="vertical-align: top;">g
+component of magnitude model. See <a href="https://www.mmto.org/obscats/edb.html#mag_models">Magnitude
+models</a>.</td>
+    </tr>
+    <tr>
+      <td valign="top"><b>Field 11</b><br>
+      </td>
+      <td colspan="2" rowspan="1" valign="top">k component of magnitude
+model<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold; width: 100px;">Field
+12<br>
+      </td>
+      <td colspan="2" rowspan="1" style="vertical-align: top;">s =
+angular size at 1 AU, arc seconds, optional</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+<div style="margin-left: 120px;"></div>
+<br>
+<div style="margin-left: 80px;"> As with elliptical elements, other
+parameters might be available. The relationships are generally the
+same, except: </div>
+<br>
+<div style="margin-left: 40px;">
+<div style="margin-left: 80px;"> <span style="font-family: monospace;">q
+= a*(e-1)</span> </div>
+<br>
+If <span style="font-weight: bold;">Field 2</span> is <span style="font-weight: bold;">p</span> the object type is parabolic
+heliocentric (eccentricity exactly equal to 1) and the remaining
+fields are defined as follows:<br>
+<br>
+<table style="text-align: left; width: 95%; margin-left: 40px;" summary="parabolic fields" border="0" cellpadding="2" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold; width: 100px;">Field
+3<br>
+      </td>
+      <td colspan="2" rowspan="1" style="vertical-align: top;">T = date
+of epoch of perihelion</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top; width: 100px;"><b>SubField 3A</b></td>
+      <td style="vertical-align: top;">First date these elements are
+valid, optional</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top; width: 100px;"><b>SubField 3B</b></td>
+      <td style="vertical-align: top;">Last date these elements are
+valid, optional</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold; width: 100px;">Field
+4<br>
+      </td>
+      <td colspan="2" rowspan="1" style="vertical-align: top;">i =
+inclination, degrees</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold; width: 100px;">Field
+5<br>
+      </td>
+      <td colspan="2" rowspan="1" style="vertical-align: top;">o =
+argument of perihelion, degrees</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold; width: 100px;">Field
+6<br>
+      </td>
+      <td colspan="2" rowspan="1" style="vertical-align: top;">q =
+perihelion distance, AU</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold; width: 100px;">Field
+7<br>
+      </td>
+      <td colspan="2" style="vertical-align: top;">O = longitude of
+ascending node, degrees</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold; width: 100px;">Field
+8<br>
+      </td>
+      <td colspan="2" style="vertical-align: top;">D = the equinox year
+(i.e., time of i/O/o).</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold; width: 100px;">Field
+9<br>
+      </td>
+      <td colspan="2" style="vertical-align: top;">g component of
+magnitude model. See <a href="https://www.mmto.org/obscats/edb.html#mag_models">Magnitude models</a>.</td>
+    </tr>
+    <tr>
+      <td valign="top"><b>Field 10</b><br>
+      </td>
+      <td colspan="2" rowspan="1" valign="top">k component of magnitude
+model</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold; width: 100px;">Field
+11<br>
+      </td>
+      <td colspan="2" style="vertical-align: top;">s = angular size at
+1 AU, arc seconds, optional</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div style="margin-left: 80px;"></div>
+<br>
+<div style="margin-left: 40px;"> If <span style="font-weight: bold;">Field
+2</span> is <span style="font-weight: bold;">E</span> (note upper
+case)
+the object type is Earth satellite and the remaining fields are defined
+as follows:<br>
+<br>
+<br>
+<table style="text-align: left; width: 95%; margin-left: 40px;" summary="earth sat fields" border="0" cellpadding="2" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold; width: 100px;">Field
+3<br>
+      </td>
+      <td colspan="2" style="vertical-align: top;">Epoch of the other
+fields</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top; width: 100px;"><b>SubField 3A</b></td>
+      <td style="vertical-align: top;">First date these elements are
+valid, optional</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top; width: 100px;"><b>SubField 3B<br>
+      </b></td>
+      <td style="vertical-align: top;">Last date these elements are
+valid, optional</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold; width: 100px;">Field
+4<br>
+      </td>
+      <td colspan="2" style="vertical-align: top;">inclination, degrees</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold; width: 100px;">Field
+5<br>
+      </td>
+      <td colspan="2" style="vertical-align: top;">RA of ascending
+node, degrees</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold; width: 100px;">Field
+6<br>
+      </td>
+      <td colspan="2" style="vertical-align: top;">eccentricity, must
+be &lt; 1</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold; width: 100px;">Field
+7<br>
+      </td>
+      <td colspan="2" style="vertical-align: top;">argument of perigee,
+degrees</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold; width: 100px;">Field
+8<br>
+      </td>
+      <td colspan="2" style="vertical-align: top;">mean anomaly, degrees</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold; width: 100px;">Field
+9<br>
+      </td>
+      <td colspan="2" style="vertical-align: top;">mean motion, revs/day</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold; width: 100px;">Field
+10<br>
+      </td>
+      <td colspan="2" style="vertical-align: top;">orbit decay rate,
+revolutions/day^2</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold; width: 100px;">Field
+11<br>
+      </td>
+      <td colspan="2" style="vertical-align: top;">integral reference
+orbit number at Epoch<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold; width: 100px;">Field
+12<br>
+      </td>
+      <td colspan="2" style="vertical-align: top;">drag coefficient,
+1/(earth radii); optional</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<br>
+<div style="margin-left: 80px;">
+<!--
+XEphem arbitrarily assigns all Earth
+satellites a visual magnitude of 2.0.<br>
+<br>
+-->
+As an alternative to using the <b>E</b> format,
+files may be read directly, containing the venerable
+Two-Line-Element (TLE) format.
+<br>
+See the <a href="https://www.mmto.org/obscats/tle.html">TLE document</a>
+for details. </div>
+<br>
+<div style="margin-left: 40px;"> If <span style="font-weight: bold;">Field
+2</span> is <span style="font-weight: bold;">P</span> (note upper case)
+then <span style="font-weight: bold;">Field 1</span> must be the name
+of a built-in object and no other fields are defined. The
+following names are recognized:<br>
+<br>
+<div style="margin-left: 40px;"> Sun<br>
+Moon<br>
+Mercury<br>
+Venus<br>
+Mars<br>
+<div style="margin-left: 40px;"> Phobos<br>
+Deimos </div>
+Jupiter<br>
+<div style="margin-left: 40px;"> Io </div>
+<div style="margin-left: 40px;"> Europa<br>
+Ganymede<br>
+Callisto </div>
+Saturn<br>
+<div style="margin-left: 40px;"> Mimas<br>
+Enceladus<br>
+Tethys<br>
+Dione<br>
+Rhea<br>
+Titan<br>
+Hyperion<br>
+Iapetus </div>
+Uranus<br>
+<div style="margin-left: 40px;"> Ariel<br>
+Umbriel<br>
+Titania<br>
+Oberon<br>
+Miranda </div>
+Neptune<br>
+Pluto </div>
+</div>
+
+<h4>
+<a class="mozTocH4" name="mozTocId564354"></a>
+<span style="font-weight: bold;">
+<a name="mag_models"></a>
+Magnitude models</span></h4>
+
+(Magnitude information is presently ignored by MMT software.)
+<br>
+The <span style="font-weight: bold;">g,k</span> magnitude model
+requires two parameters to be specified. One, the absolute magnitude,
+g, is the visual magnitude of the object if it were one AU from both
+the Sun and the Earth. The other, the luminosity index, k,
+characterizes the brightness change of the object as a function of its
+distance from the Sun. This is generally zero, or very small, for
+inactive objects like asteroids. The model may be expressed as:<br>
+<br>
+<div style="margin-left: 40px;"> <span style="font-family: monospace;">m
+= g + 5*log10(D) + 2.5*k*log10(r)</span> </div>
+<br>
+where:<br>
+<br>
+<div style="margin-left: 40px;"> <span style="font-family: monospace;">m</span>
+= resulting visual magnitude<br>
+<span style="font-family: monospace;">g</span> = absolute visual
+magnitude<br>
+<span style="font-family: monospace;">D</span> = comet-earth distance,
+in AU </div>
+<div style="margin-left: 40px;"> <span style="font-family: monospace;">k</span>
+= luminosity index </div>
+<div style="margin-left: 40px;"> <span style="font-family: monospace;">r</span>
+= comet-sun distance. </div>
+<br>
+The <span style="font-weight: bold;">H,G</span> model also requires
+two parameters. The first, H, is the magnitude of the object when one
+AU from the Sun and the Earth. The other, G, attempts to model the
+reflection characteristics of a passive surface, such as an asteroid.
+The model may be expressed with the following code fragment:<br>
+<br style="font-family: monospace;">
+<div style="margin-left: 40px;"> <span style="font-family: monospace;">beta
+= acos((rp*rp + rho*rho - rsn*rsn)/ (2*rp*rho));</span><br style="font-family: monospace;">
+<span style="font-family: monospace;">psi_t =
+exp(log(tan(beta/2.0))*0.63);</span><br style="font-family: monospace;">
+<span style="font-family: monospace;">Psi_1 = exp(-3.33*psi_t);</span><br style="font-family: monospace;">
+<span style="font-family: monospace;">psi_t =
+exp(log(tan(beta/2.0))*1.22);</span><br style="font-family: monospace;">
+<span style="font-family: monospace;">Psi_2 = exp(-1.87*psi_t);</span><br style="font-family: monospace;">
+<span style="font-family: monospace;">m = H + 5.0*log10(rp*rho) -
+2.5*log10((1-G)*Psi_1 + G*Psi_2);</span> </div>
+<br>
+where:<br>
+<br>
+<div style="margin-left: 40px;"> <span style="font-family: monospace;">m&nbsp;&nbsp;</span>=
+resulting visual magnitude<br>
+<span style="font-family: monospace;">rp&nbsp; </span>= distance from
+sun to object<br>
+<span style="font-family: monospace;">rho </span>= distance from
+earth to object<br>
+<span style="font-family: monospace;">rsn </span>= distance from
+sun to earth </div>
+<br>
+Note that neither model takes into account the phase angle of sun light.<br>
+<br>
+
+
+
+<span id="sbmarwbthv5"></span></body></html>
