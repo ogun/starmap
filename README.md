@@ -1,24 +1,24 @@
 # Starmap
 
-Starmap yıldızların gökyüzündekini konumlarını istenilen tarihte ve konumda görüntülemeye yarayan bir programdır. Programa dahil olan yıldız haritalarının formatı "[XEphem database file](https://www.mmto.org/obscats/edb.html)" ve dosya uzantısı ".edb"dir. Program şu anda aşağıdaki iki tane katalog dosyasını kullanıyor.
+Starmap is a program for viewing the positions of the stars in the sky at the desired date and location. The format of the star maps included in the program is "[XEphem database file](https://www.mmto.org/obscats/edb.html)" and the file extension is ".edb". The program currently uses the following two catalog files.
 * [Yale Bright Star Catalog](http://tdc-www.harvard.edu/catalogs/bsc5.html) (1991)
 * Messier Catalog (2005)
 
-Yıldızların gökyüzündeki pozisyonunu çizmek ve SVG formatında görüntülemek için ise [star-charts](https://github.com/codebox/star-charts) isimli kütüphaneyi kullanıyor.
+It uses the [star-charts](https://github.com/codebox/star-charts) library to draw the position of the stars in the sky and display it in SVG format.
 
 ## Query Strings
 
-Programı çağırırken kullanabileceğiniz parametreler aşağıda verilmiştir
+The parameters you can use while calling the program are given below.
 
-| Parametre | Açıklama |
+| Parameter | Description |
 | ------ | ------ |
-| date | [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) formatında tarih. Verilmezse güncel tarihi alır. Örn.: 2017-07-07T12:00:00Z|
-| lat | Enlem bilgisi. Varsayılan İstanbul'a ait: 41.015137 |
-| lon | Boylam bilgisi. Varsayılan İstanbul'a ait: 28.979530 |
-| elevation | Yükseklik bilgisi. Varsayılan: 0 |
-| mag_min | Çizime dahil olacak en düşük yıldız parlaklığı. Parlaklık azaldıkça değer artar. Varsayılan: 4 |
-| mag_max | Çizime dahil olacak en yüksek yıldız parlaklığı. Eksi değerler alabilir. Varsayılan: 0 |
+| date | Date in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format. If not, it takes the current date. Ex.: 2017-07-07T12:00:00Z|
+| lat | Latitude information. Default value is Istanbul: 41.015137 |
+| lon | Longitude information. Default value is Istanbul: 28.979530 |
+| elevation | Elevation information. Default: 0 |
+| mag_min | The lowest star brightness that will be included in the drawing. The value increases as the brightness decreases. Default: 4 |
+| mag_max | The highest star brightness that will be included in the drawing. It can take negative values. Default: 0 |
 
-### Çalışma Yöntemi
+### About
 
-Gelen isteğe ait tarih ve konuma göre yıldızların pozisyonları EDB veritabanları ve pyephem kütüphanesi yardımıyla hesaplanır. Yıldızların pozisyonları hesaplandıktan sonra bu pozisyonlar star-charts kütüphanesinin istediği formata edb_converter ile çevrilir. İstenilen formata çevirildikten sonra star-charts kütüphanesi yardımıyla SVG dosyası oluşturulur ve gösterilir.
+The positions of the stars are calculated with the help of EDB databases and pyephem library according to the date and location of the request. After the positions of the stars are calculated, these positions are converted to the format requested by the star-charts library with edb_converter. After converting to the desired format, SVG file is created and displayed with the help of star-charts library.
