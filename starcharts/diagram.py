@@ -1,5 +1,5 @@
 from __future__ import division
-from svg import Svg
+from .svg import Svg
 import codecs
 
 MARGIN_X = 50

@@ -1,5 +1,4 @@
-import codecs
-from star_data import StarData, StarDataList
+from .star_data import StarData, StarDataList
 
 
 class InputFile:

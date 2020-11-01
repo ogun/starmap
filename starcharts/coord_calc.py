@@ -75,7 +75,7 @@ class CoordCalc:
         self.offset_and_scale_x = offset_and_scale_x
         self.offset_and_scale_y = offset_and_scale_y
 
-        map(offset_and_scale, self.star_data_list.data)
+        list(map(offset_and_scale, self.star_data_list.data))
 
     def process(self):
         self._populate_angles()

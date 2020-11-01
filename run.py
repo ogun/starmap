@@ -29,7 +29,7 @@ class MainHandler(tornado.web.RequestHandler):
         cc.process()
 
         d = Diagram("My Star Map", area, star_data_list)
-        map(d.add_curve, cc.calc_curves())
+        list(map(d.add_curve, cc.calc_curves()))
         svg_file = d.get_svg("")
 
         self.set_header("Content-Type", "image/svg+xml")
