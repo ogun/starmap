@@ -1,6 +1,7 @@
 import codecs
 from star_data import StarData, StarDataList
 
+
 class InputFile:
     def __init__(self, new_catalog):
         self.new_catalog = new_catalog
@@ -17,9 +18,9 @@ class InputFile:
         matches = []
         idx = 0
         for line in self.new_catalog.splitlines():
-            parts = line.split(',')
+            parts = line.split(",")
             ra, dec, mag = map(float, parts[:3])
-            label = '' if len(parts) < 4 else parts[3]
+            label = "" if len(parts) < 4 else parts[3]
             idx += 1
 
             # because smaller mag values mean brighter stars

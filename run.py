@@ -28,7 +28,7 @@ class MainHandler(tornado.web.RequestHandler):
         cc = CoordCalc(star_data_list, area, 500)
         cc.process()
 
-        d = Diagram('My Star Map', area, star_data_list)
+        d = Diagram("My Star Map", area, star_data_list)
         map(d.add_curve, cc.calc_curves())
         svg_file = d.get_svg("")
 
@@ -51,9 +51,12 @@ class MainHandler(tornado.web.RequestHandler):
 
 
 def make_app():
-    return tornado.web.Application([
-        (r"/", MainHandler),
-    ])
+    return tornado.web.Application(
+        [
+            (r"/", MainHandler),
+        ]
+    )
+
 
 if __name__ == "__main__":
     app = make_app()

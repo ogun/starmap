@@ -42,12 +42,23 @@ def convert(date, lat, lon, elevation):
 
             ra = angle_to_right_ascension(star.az)
             dec = math.degrees(star.alt)
-            
+
             new_catalog += "%s,%s,%s\n" % (ra, dec, star.mag)
         except Exception as ex:
             print(catalog_star)
 
-    planets = [ephem.Jupiter(), ephem.Mars(), ephem.Mercury(), ephem.Moon(), ephem.Neptune(), ephem.Pluto(), ephem.Saturn(), ephem.Sun(), ephem.Uranus(), ephem.Venus()]
+    planets = [
+        ephem.Jupiter(),
+        ephem.Mars(),
+        ephem.Mercury(),
+        ephem.Moon(),
+        ephem.Neptune(),
+        ephem.Pluto(),
+        ephem.Saturn(),
+        ephem.Sun(),
+        ephem.Uranus(),
+        ephem.Venus(),
+    ]
     for planet in planets:
         planet.compute(gatech)
         ra = angle_to_right_ascension(planet.az)

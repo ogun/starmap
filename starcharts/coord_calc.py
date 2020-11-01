@@ -2,15 +2,20 @@
 from __future__ import division
 from math import sin, cos, degrees, radians, pi
 
+
 class CoordCalc:
     def __init__(self, star_data_list, area, diagram_size):
         self.star_data_list = star_data_list
         self.area = area
-        self.center_ra_angle  = self._ra_to_angle((area.ra_min + area.ra_max)/2)
+        self.center_ra_angle = self._ra_to_angle((area.ra_min + area.ra_max) / 2)
         if area.ra_max - area.ra_min >= 12:
-            self.center_dec_angle = self._dec_to_angle(90 if abs(area.dec_min) < abs(area.dec_max) else -90)
+            self.center_dec_angle = self._dec_to_angle(
+                90 if abs(area.dec_min) < abs(area.dec_max) else -90
+            )
         else:
-            self.center_dec_angle = self._dec_to_angle((area.dec_min + area.dec_max)/2)
+            self.center_dec_angle = self._dec_to_angle(
+                (area.dec_min + area.dec_max) / 2
+            )
         self.diagram_size = diagram_size
 
     def _ra_to_angle(self, ra):
@@ -23,25 +28,29 @@ class CoordCalc:
 
     def _populate_angles(self):
         for star_data in self.star_data_list.data:
-            star_data.ra_angle  = self._ra_to_angle(star_data.ra)
+            star_data.ra_angle = self._ra_to_angle(star_data.ra)
             star_data.dec_angle = self._dec_to_angle(star_data.dec)
 
     def _angle_to_xy(self, ra_angle, dec_angle):
         # http://www.projectpluto.com/project.htm
         delta_ra = ra_angle - self.center_ra_angle
         x = cos(dec_angle) * sin(delta_ra)
-        y = sin(dec_angle) * cos(self.center_dec_angle) - cos(dec_angle) * cos(delta_ra) * sin(self.center_dec_angle)
-        return x,y
+        y = sin(dec_angle) * cos(self.center_dec_angle) - cos(dec_angle) * cos(
+            delta_ra
+        ) * sin(self.center_dec_angle)
+        return x, y
 
     def _populate_xy(self):
         for star_data in self.star_data_list.data:
-            star_data.x, star_data.y = self._angle_to_xy(star_data.ra_angle, star_data.dec_angle)
+            star_data.x, star_data.y = self._angle_to_xy(
+                star_data.ra_angle, star_data.dec_angle
+            )
 
     def _offset_and_scale_xy(self):
-        min_x = min(map(lambda sd : sd.x, self.star_data_list.data))
-        min_y = min(map(lambda sd : sd.y, self.star_data_list.data))
-        max_x = max(map(lambda sd : sd.x, self.star_data_list.data))
-        max_y = max(map(lambda sd : sd.y, self.star_data_list.data))
+        min_x = min(map(lambda sd: sd.x, self.star_data_list.data))
+        min_y = min(map(lambda sd: sd.y, self.star_data_list.data))
+        max_x = max(map(lambda sd: sd.x, self.star_data_list.data))
+        max_y = max(map(lambda sd: sd.y, self.star_data_list.data))
 
         x_range = max_x - min_x
         y_range = max_y - min_y
@@ -74,7 +83,7 @@ class CoordCalc:
         self._offset_and_scale_xy()
 
     def _ra_dec_to_x_y(self, ra, dec):
-        ra_angle  = self._ra_to_angle(ra)
+        ra_angle = self._ra_to_angle(ra)
         dec_angle = self._dec_to_angle(dec)
 
         base_x, base_y = self._angle_to_xy(ra_angle, dec_angle)
@@ -85,9 +94,9 @@ class CoordCalc:
         points = []
         dec_min = self.area.dec_min
         dec_max = self.area.dec_max
-        dec_step =  (dec_max - dec_min) / steps
+        dec_step = (dec_max - dec_min) / steps
 
-        for i in range(steps+1):
+        for i in range(steps + 1):
             x, y = self._ra_dec_to_x_y(ra, dec_min + dec_step * i)
             points.append((x, y))
 
@@ -97,11 +106,11 @@ class CoordCalc:
         points = []
         ra_min = self.area.ra_min
         ra_max = self.area.ra_max
-        ra_step =  (ra_max - ra_min) / steps
+        ra_step = (ra_max - ra_min) / steps
 
-        for i in range(steps+1):
+        for i in range(steps + 1):
             x, y = self._ra_dec_to_x_y(ra_min + ra_step * i, dec)
-            points.append((x,y))
+            points.append((x, y))
 
         return points
 
