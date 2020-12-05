@@ -13,7 +13,7 @@ from starcharts.input_file import InputFile
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
-        date, lat, lon, elevation, mag_min, mag_max = self.get_query_strings()
+        date, lat, lon, elevation, mag_min, mag_max, color = self.get_query_strings()
         new_catalog = converter.convert(date, lat, lon, elevation)
 
         input_file = InputFile(new_catalog)
@@ -26,9 +26,9 @@ class MainHandler(tornado.web.RequestHandler):
         cc = CoordCalc(star_data_list, area, 500)
         cc.process()
 
-        d = Diagram("My Star Map", area, star_data_list)
+        d = Diagram(area, star_data_list, color)
         list(map(d.add_curve, cc.calc_curves()))
-        svg_file = d.get_svg("")
+        svg_file = d.get_svg()
 
         self.set_header("Content-Type", "image/svg+xml")
         self.write("".join(svg_file))
@@ -44,8 +44,9 @@ class MainHandler(tornado.web.RequestHandler):
         elevation = int(self.get_argument("elevation", 0, strip=True))
         mag_min = int(self.get_argument("mag_min", 4, strip=True))
         mag_max = int(self.get_argument("mag_max", 0, strip=True))
+        color = str(self.get_argument("color", "black", strip=True))
 
-        return date, lat, lon, elevation, mag_min, mag_max
+        return date, lat, lon, elevation, mag_min, mag_max, color
 
 
 def make_app():
