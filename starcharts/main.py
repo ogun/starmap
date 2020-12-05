@@ -1,4 +1,3 @@
-from __future__ import division
 import sky_area
 from input_file import InputFile
 from diagram import Diagram

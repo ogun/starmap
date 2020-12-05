@@ -1,6 +1,4 @@
-# -*- coding: utf-8 -*-
-from __future__ import division
-from math import sin, cos, degrees, radians, pi
+from math import sin, cos, radians, pi
 
 
 class CoordCalc:

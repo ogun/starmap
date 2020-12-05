@@ -9,28 +9,22 @@ class Svg:
 
     def line(self, x1, y1, x2, y2, width, colour):
         self.elements.append(
-            '<line x1="{}" y1="{}" x2="{}" y2="{}" stroke-width="{}" stroke="{}"/>'.format(
-                x1, y1, x2, y2, width, colour
-            )
+            f'<line x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}" stroke-width="{width}" stroke="{colour}"/>'
         )
 
     def text(self, x, y, l, colour, size, align="left", decoration="None"):
         self.elements.append(
-            u'<text x="{}" y="{}" text-anchor="{}" text-decoration="{}" style="fill: {}; font-size: {}px; font-family: monospace">{}</text>'.format(
-                x, y, align, decoration, colour, size, l
-            )
+            f'<text x="{x}" y="{y}" text-anchor="{align}" text-decoration="{decoration}" style="fill: {colour}; font-size: {size}px; font-family: monospace">{l}</text>'
         )
 
     def circle(self, x, y, d, colour):
-        self.elements.append(
-            '<circle cx="{}" cy="{}" r="{}" fill="{}" />'.format(x, y, d, colour)
-        )
+        self.elements.append(f'<circle cx="{x}" cy="{y}" r="{d}" fill="{colour}" />')
 
     def curve(self, _points, width, colour):
         points = sum(_points, ())
 
         # http://schepers.cc/getting-to-the-point
-        d = "M {} {} ".format(points[0], points[1])
+        d = f"M {points[0]} {points[1]} "
         i = 0
         points_length = len(points)
         while points_length - 2 > i:
@@ -69,14 +63,10 @@ class Svg:
             )
             bp.append((p[2][0], p[2][1]))
 
-            d += "C {} {},{} {},{} {} ".format(
-                bp[1][0], bp[1][1], bp[2][0], bp[2][1], bp[3][0], bp[3][1]
-            )
+            d += f"C {bp[1][0]} {bp[1][1]},{bp[2][0]} {bp[2][1]},{bp[3][0]} {bp[3][1]} "
 
         self.elements.append(
-            '<path d="{}" stroke="{}" stroke-width="{}" fill="transparent"/>'.format(
-                d, colour, width
-            )
+            f'<path d="{d}" stroke="{colour}" stroke-width="{width}" fill="transparent"/>'
         )
 
     def to_list(self):

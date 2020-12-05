@@ -1,4 +1,5 @@
 """ edb dosyalarini star-charts'in istedigi formata cevirir """
+import logging
 import os
 import math
 import ephem
@@ -43,9 +44,10 @@ def convert(date, lat, lon, elevation):
             ra = angle_to_right_ascension(star.az)
             dec = math.degrees(star.alt)
 
-            new_catalog += "%s,%s,%s\n" % (ra, dec, star.mag)
+            new_catalog += f"{ra},{dec},{star.mag}\n"
         except Exception as ex:
             print(catalog_star)
+            logging.exception(ex)
 
     planets = [
         ephem.Jupiter(),
@@ -63,6 +65,6 @@ def convert(date, lat, lon, elevation):
         planet.compute(gatech)
         ra = angle_to_right_ascension(planet.az)
         dec = math.degrees(planet.alt)
-        new_catalog += "%s,%s,%s,%s\n" % (ra, dec, planet.mag, planet.name)
+        new_catalog += f"{ra},{dec},{planet.mag},{planet.name}\n"
 
     return new_catalog

@@ -1,7 +1,6 @@
 version: "3.3"
 services:
   starmap:
-    container_name: starmap
     build:
       context: .
       dockerfile: Dockerfile
