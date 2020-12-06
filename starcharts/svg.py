@@ -20,6 +20,11 @@ class Svg:
     def circle(self, x, y, d, colour):
         self.elements.append(f'<circle cx="{x}" cy="{y}" r="{d}" fill="{colour}" />')
 
+    def circle2(self, x, y, d, width, colour):
+        self.elements.append(
+            f'<circle cx="{x}" cy="{y}" r="{d}" stroke="{colour}" stroke-width="{width}" fill="none" />'
+        )
+
     def curve(self, _points, width, colour):
         points = sum(_points, ())
 

@@ -19,7 +19,7 @@ MAPPING = {
     "3092": "And Delta-31",
     "3031": "And Epsilo-30",
     "4463": "And Eta-38",
-    #"9640": "And Gamma1-57",
+    # "9640": "And Gamma1-57",
     "9640": "And Gamma2-57",
     "116631": "And Iota-17",
     "116805": "And Kappa-19",
@@ -271,7 +271,7 @@ MAPPING = {
     "14838": "Ari Delta-57",
     "13914": "Ari Epsilo-48",
     "10306": "Ari Eta-17",
-    #"8832": "Ari Gamma1-5",
+    # "8832": "Ari Gamma1-5",
     "8832": "Ari Gamma2-5",
     "9110": "Ari Iota-8",
     "9836": "Ari Kappa-12",
@@ -395,7 +395,7 @@ MAPPING = {
     "74596": "Boo Chi-48",
     "74666": "Boo Delta-49",
     "72105": "Boo Epsilo-36",
-    #"72105": "Pulcherrima",
+    # "72105": "Pulcherrima",
     "67927": "Muphrid",
     "71075": "Boo Gamma-27",
     "69713": "Boo Iota-21",
@@ -410,7 +410,7 @@ MAPPING = {
     "72125": "Boo Omicro-35",
     "76534": "Boo Phi-54",
     "71762": "Boo Pi1-29",
-    #"71762": "Boo Pi2-29",
+    # "71762": "Boo Pi2-29",
     "73745": "Boo Psi-43",
     "71053": "Boo Rho-25",
     "71284": "Boo Sigma-28",
@@ -862,8 +862,8 @@ MAPPING = {
     "41816": "Cnc Upsil1-30",
     "41940": "Cnc Upsil2-32",
     "44946": "Cnc Xi-77",
-    #"40167": "Cnc Zeta1-16",
-    #"40167": "Cnc Zeta1-16",
+    # "40167": "Cnc Zeta1-16",
+    # "40167": "Cnc Zeta1-16",
     "40167": "Cnc Zeta2-16",
     "38848": "Cnc 1",
     "39177": "Cnc 3",
@@ -990,7 +990,7 @@ MAPPING = {
     "76127": "CrB Theta-4",
     "79757": "CrB Upsilo-18",
     "80181": "CrB Xi-19",
-    #"76669": "CrB Zeta1-7",
+    # "76669": "CrB Zeta1-7",
     "76669": "CrB Zeta2-7",
     "53740": "Crt Alpha-7",
     "54682": "Crt Beta-11",
@@ -1040,7 +1040,7 @@ MAPPING = {
     "95853": "Cyg Iota2-10",
     "94779": "Cyg Kappa-1",
     "102589": "Cyg Lambda-54",
-    #"107310": "Cyg Mu1-78",
+    # "107310": "Cyg Mu1-78",
     "107310": "Cyg Mu2-78",
     "103413": "Cyg Nu-58",
     "101138": "Cyg Omega1-45",
@@ -1255,7 +1255,7 @@ MAPPING = {
     "17717": "Eri Tau7-28",
     "18216": "Eri Tau8-33",
     "18673": "Eri Tau9-36",
-    #"13847": "Eri Theta1",
+    # "13847": "Eri Theta1",
     "13847": "Eri Theta2",
     "21248": "Eri Upsil1-50",
     "21393": "Eri Upsil2-52",
@@ -1419,7 +1419,7 @@ MAPPING = {
     "114132": "Gru Upsilon",
     "106327": "Gru Xi",
     "113638": "Gru Zeta",
-    #"84345": "Her Alpha1-64",
+    # "84345": "Her Alpha1-64",
     "84345": "Her Alpha2-64",
     "80816": "Kornephoros",
     "77760": "Her Chi-1",
@@ -1674,7 +1674,7 @@ MAPPING = {
     "54872": "Zozca",
     "47908": "Leo Epsilo-17",
     "49583": "Leo Eta-30",
-    #"50583": "Leo Gamma1-41",
+    # "50583": "Leo Gamma1-41",
     "50583": "Leo Gamma2-41",
     "55642": "Leo Iota-78",
     "46146": "Leo Kappa-1",
@@ -2373,7 +2373,7 @@ MAPPING = {
     "112102": "PsA 19",
     "112862": "PsA 21",
     "9487": "Kaitain",
-    #"9487": "Psc Alpha-113",
+    # "9487": "Psc Alpha-113",
     "113889": "Psc Beta-4",
     "5571": "Psc Chi-84",
     "3786": "Psc Delta-63",
@@ -3011,7 +3011,7 @@ MAPPING = {
     "85699": "UMi 24",
     "42913": "Vel Delta",
     "39953": "Vel Gamma1",
-    #"39953": "Vel Gamma2",
+    # "39953": "Vel Gamma2",
     "45941": "Vel Kappa",
     "44816": "Vel Lambda",
     "52727": "Vel Mu",
@@ -3202,6 +3202,11 @@ class Diagram:
     def get_svg(self):
         svg = Svg()
 
+        # coords
+        center_x = self.star_data_list.max_x / 2 + MARGIN_X
+        center_y = self.star_data_list.max_y / 2 + MARGIN_Y
+        svg.circle2(center_x, center_y, 253, 4, self.star_color)
+
         # add stars first
         for star_data in self.star_data_list.data:
             x, y = self._invert_and_offset(star_data.x, star_data.y)
@@ -3217,18 +3222,23 @@ class Diagram:
 
             left_label = MAPPING[left]
             left_star = next(
-                (star for star in self.star_data_list.data if star.label == left_label), None
+                (star for star in self.star_data_list.data if star.label == left_label),
+                None,
             )
             if not left_star:
                 continue
-
 
             if right not in MAPPING:
                 continue
 
             right_label = MAPPING[right]
             right_star = next(
-                (star for star in self.star_data_list.data if star.label == right_label), None
+                (
+                    star
+                    for star in self.star_data_list.data
+                    if star.label == right_label
+                ),
+                None,
             )
             if not right_star:
                 continue

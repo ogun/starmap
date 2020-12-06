@@ -13,7 +13,16 @@ from starcharts.input_file import InputFile
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
-        date, lat, lon, elevation, mag_min, mag_max, skyculture, color = self.get_query_strings()
+        (
+            date,
+            lat,
+            lon,
+            elevation,
+            mag_min,
+            mag_max,
+            skyculture,
+            color,
+        ) = self.get_query_strings()
         new_catalog = converter.convert(date, lat, lon, elevation)
 
         input_file = InputFile(new_catalog)
