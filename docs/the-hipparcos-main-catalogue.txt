@@ -1,0 +1,39 @@
+#  
+#   VizieR Astronomical Server vizier.u-strasbg.fr
+#    Date: 2020-12-05T23:56:09 [V1.99+ (14-Oct-2013)]
+#   In case of problem, please report to: cds-question@unistra.fr
+# 
+#   
+#Coosys J2000: eq_FK5 J2000 
+#INFO votable-version=1.99+ (14-Oct-2013) 
+#INFO -ref=VOTx6315 
+#INFO -out.max=unlimited 
+#INFO queryParameters=3 
+#-oc.form=D.
+#-source=I/239/hip_main
+#-out.max=unlimited
+#
+
+#RESOURCE=yCat_1239
+#Name: I/239
+#Title: The Hipparcos and Tycho Catalogues (ESA 1997)
+#Coosys H_1991.250: ICRS     
+#Table I_239_hip_main:
+#Name: I/239/hip_main
+#Title: The Hipparcos Main Catalogue
+#---Details of Columns:
+    HIP            (I6)    Identifier (HIP number) (H1) [ucd=meta.id;meta.main]
+    RAhms          (A11)   Right ascension in h m s, ICRS (J1991.25) (H3) [ucd=pos.eq.ra]
+    DEdms          (A11)   Declination in deg ' ", ICRS (J1991.25) (H4) [ucd=pos.eq.dec]
+    Vmag (mag)     (F5.2)  ? Magnitude in Johnson V (H5) [ucd=phot.mag;em.opt.V]
+    RAICRS (deg)   (F12.8) ? alpha, degrees (ICRS, Epoch=J1991.25) (H8) [ucd=pos.eq.ra]
+    DEICRS (deg)   (F12.8) ? delta, degrees (ICRS, Epoch=J1991.25) (H9) [ucd=pos.eq.dec]
+    Plx (mas)      (F7.2)  ? Trigonometric parallax (H11) [ucd=pos.parallax.trig]
+    pmRA (mas/yr)  (F8.2)  *? Proper motion mu_alpha.cos(delta), ICRS(H12) [ucd=pos.pm;pos.eq.ra]
+    pmDE (mas/yr)  (F8.2)  *? Proper motion mu_delta, ICRS (H13) [ucd=pos.pm;pos.eq.dec]
+    e_Plx (mas)    (F6.2)  ? Standard error in Plx (H16) [ucd=stat.error;pos.parallax]
+    B-V (mag)      (F6.3)  ? Johnson B-V colour (H37) [ucd=phot.color;em.opt.B;em.opt.V]
+    Notes          (A1)    [DGPWXYZ] Existence of notes (H70) [ucd=meta.note]
+    _RA.icrs (deg) (F12.8) Right ascension (ICRS) at Epoch=J2000, proper motions taken into account [ucd=pos.eq.ra]
+    _DE.icrs (deg) (F12.8) Declination (ICRS) at Epoch=J2000, proper motions taken into account [ucd=pos.eq.dec]
+------ ----------- ----------- ----- ------------ ------------ ------- -------- -------- ------ ------ - ------------ ------------
