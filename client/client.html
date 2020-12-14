@@ -22,12 +22,31 @@
                         <td><input type="date" name="starmap-date" id="starmap-date" value="2020-01-01"></td>
                     </tr>
                     <tr>
+                        <td>BG Color</td>
+                        <td><input type="text" name="starmap-bg-color" id="starmap-bg-color" value="#ffffff"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <hr />
+                        </td>
+                    </tr>
+                    <tr>
                         <td>BG Url</td>
                         <td><input type="text" name="starmap-bg-url" id="starmap-bg-url" value="bg1.jpg"></td>
                     </tr>
                     <tr>
-                        <td>BG Color</td>
-                        <td><input type="text" name="starmap-bg-color" id="starmap-bg-color" value="#ffffff"></td>
+                        <td>Correction</td>
+                        <td><input type="text" name="starmap-bg-correction" id="starmap-bg-correction" value="0"></td>
+                    </tr>
+                    <tr>
+                        <td>Correction X</td>
+                        <td><input type="text" name="starmap-bg-correction-x" id="starmap-bg-correction-x" value="0">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Correction Y</td>
+                        <td><input type="text" name="starmap-bg-correction-y" id="starmap-bg-correction-y" value="0">
+                        </td>
                     </tr>
                     <tr>
                         <td colspan="2">
@@ -39,12 +58,16 @@
                         <td><input type="text" name="frame-enabled" id="frame-enabled" value="True"></td>
                     </tr>
                     <tr>
-                        <td>Frame Color</td>
+                        <td>Color</td>
                         <td><input type="text" name="frame-color" id="frame-color" value="#000000"></td>
                     </tr>
                     <tr>
-                        <td>Frame Width</td>
+                        <td>Width</td>
                         <td><input type="text" name="frame-width" id="frame-width" value="5"></td>
+                    </tr>
+                    <tr>
+                        <td>Correction</td>
+                        <td><input type="text" name="frame-correction" id="frame-correction" value="0"></td>
                     </tr>
                     <tr>
                         <td colspan="2">
@@ -169,6 +192,18 @@
                         <td><input type="text" name="starmap-skyculture" id="starmap-skyculture" value="western"></td>
                     </tr>
                     <tr>
+                        <td>Correction</td>
+                        <td><input type="text" name="starmap-correction" id="starmap-correction" value="0"></td>
+                    </tr>
+                    <tr>
+                        <td>Correction X</td>
+                        <td><input type="text" name="starmap-correction-x" id="starmap-correction-x" value="0"></td>
+                    </tr>
+                    <tr>
+                        <td>Correction Y</td>
+                        <td><input type="text" name="starmap-correction-y" id="starmap-correction-y" value="0"></td>
+                    </tr>
+                    <tr>
                         <td></td>
                         <td><input type="button" onclick="javascript:render();" value="Update"></td>
                     </tr>
@@ -191,9 +226,20 @@
             border: 1px solid gray;
         }
 
-        #sky-poster-230x230 { width: 230px; height: 230px; }
-        #sky-poster-300x400 { width: 300px; height: 400px; }
-        #sky-poster-400x500 { width: 400px; height: 500px; }
+        #sky-poster-230x230 {
+            width: 230px;
+            height: 230px;
+        }
+
+        #sky-poster-300x400 {
+            width: 300px;
+            height: 400px;
+        }
+
+        #sky-poster-400x500 {
+            width: 400px;
+            height: 500px;
+        }
     </style>
     <script>
         let starmapStorage = window.localStorage;
@@ -288,9 +334,9 @@
 
         function render() {
             saveInputElements(starmapStorage);
-            renderCanvas('sky-poster-230x230', .8, {"text-1": .8, "text-2": .85, "text-3": .9, "text-4": .95});
-            renderCanvas('sky-poster-300x400', 1,  {"text-1": .75, "text-2": .81, "text-3": .87, "text-4": .93});
-            renderCanvas('sky-poster-400x500', 1,  {"text-1": .79, "text-2": .84, "text-3": .89, "text-4": .94});
+            renderCanvas('sky-poster-230x230', .8, { "text-1": .8, "text-2": .85, "text-3": .9, "text-4": .95 });
+            renderCanvas('sky-poster-300x400', 1, { "text-1": .75, "text-2": .81, "text-3": .87, "text-4": .93 });
+            renderCanvas('sky-poster-400x500', 1, { "text-1": .79, "text-2": .84, "text-3": .89, "text-4": .94 });
         }
 
         function renderCanvas(canvasId, imageRatio, texts) {
@@ -334,21 +380,26 @@
             }
             const frameColor = starmapStorage.getItem("frame-color");
             const frameWidth = Number(starmapStorage.getItem("frame-width"));
-            const frameMargin = .02
+            const frameCorrection = Number(starmapStorage.getItem("frame-correction"));
+            const frameMargin = .02 + frameCorrection;
 
             ctx.strokeStyle = frameColor;
             ctx.lineWidth = frameWidth;
             ctx.strokeRect(width * frameMargin, height * frameMargin, width * (1 - (2 * frameMargin)), height * (1 - (2 * frameMargin)));
         }
 
-        function drawBackgroundImage(ctx, width, height, imageRatio=1, texts={}) {
+        function drawBackgroundImage(ctx, width, height, imageRatio = 1, texts = {}) {
             var img = new Image();
             img.onload = function () {
                 const marginPercentage = .01;
-                const scaledWidth = width * imageRatio;
+                const imageCorrection = Number(starmapStorage.getItem("starmap-bg-correction"));
+                const imageCorrectionX = Number(starmapStorage.getItem("starmap-bg-correction-x"));
+                const imageCorrectionY = Number(starmapStorage.getItem("starmap-bg-correction-y"));
 
-                const dx = (width - scaledWidth) / 2
-                const dy = width * marginPercentage
+                const scaledWidth = (width * imageRatio) + (width * imageCorrection);
+
+                const dx = ((width - scaledWidth) / 2) + (width * imageCorrectionX)
+                const dy = width * marginPercentage + (width * imageCorrectionY)
 
                 ctx.drawImage(img, dx, dy, scaledWidth, scaledWidth);
 
@@ -359,14 +410,18 @@
             img.src = bgImg;
         }
 
-        function drawStarmapImage(ctx, width, height, imageRatio=1, texts={}) {
+        function drawStarmapImage(ctx, width, height, imageRatio = 1, texts = {}) {
             var img = new Image();
             img.onload = function () {
                 const marginPercentage = .01;
-                const scaledWidth = width * imageRatio;
+                const imageCorrection = Number(starmapStorage.getItem("starmap-correction"));
+                const imageCorrectionX = Number(starmapStorage.getItem("starmap-correction-x"));
+                const imageCorrectionY = Number(starmapStorage.getItem("starmap-correction-y"));
 
-                const dx = (width - scaledWidth) / 2
-                const dy = width * marginPercentage
+                const scaledWidth = (width * imageRatio) + (width * imageCorrection);
+
+                const dx = ((width - scaledWidth) / 2) + (width * imageCorrectionX)
+                const dy = width * marginPercentage + (width * imageCorrectionY)
 
                 ctx.drawImage(img, dx, dy, scaledWidth, scaledWidth);
 
