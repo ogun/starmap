@@ -19,6 +19,9 @@ The parameters you can use while calling the program are given below.
 | mag_min | The lowest star brightness that will be included in the drawing. The value increases as the brightness decreases. Default: 4 |
 | mag_max | The highest star brightness that will be included in the drawing. It can take negative values. Default: 0 |
 | color | Color information. Default value is black. You can use hex color such as #000000 |
+| frame_enabled | Frame information. Default value is True. |
+| frame_width | Frame width information. Default value is 4. |
+| frame_color | Frame color information. Default value is black. You can use hex color such as #000000 |
 | skyculture | Constellation types. Default value is western: Available options are: arabic, arabic_moon_stations, aztec, belarusian, boorong, chinese, dakota, egyptian, hawaiian_starlines, indian, inuit, japanese_moon_stations, kamilaroi, korean, macedonian, maori, mongolian, navajo, norse, ojibwe, romanian, sami, sardinian, siberian, tongan, tukano, tupi, western, western_hlad, western_rey |
 
 ### About

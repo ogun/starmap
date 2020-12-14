@@ -3164,7 +3164,16 @@ MAPPING = {
 
 
 class Diagram:
-    def __init__(self, area, star_data_list, skyculture="western", star_color="white"):
+    def __init__(
+        self,
+        area,
+        star_data_list,
+        skyculture="western",
+        star_color="white",
+        frame_enabled=True,
+        frame_width=4,
+        frame_color="white",
+    ):
         self.cons_lines = []
         current_path = os.path.dirname(__file__)
         skyculture = f"../skycultures/{skyculture}/constellationship.fab"
@@ -3183,6 +3192,9 @@ class Diagram:
         self.star_data_list = star_data_list
         self.curves = []
         self.star_color = star_color
+        self.frame_enabled = frame_enabled
+        self.frame_width = frame_width
+        self.frame_color = frame_color
         self.border_min_x = (
             self.border_min_y
         ) = self.border_max_x = self.border_max_y = None
@@ -3203,9 +3215,10 @@ class Diagram:
         svg = Svg()
 
         # coords
-        center_x = self.star_data_list.max_x / 2 + MARGIN_X
-        center_y = self.star_data_list.max_y / 2 + MARGIN_Y
-        svg.circle2(center_x, center_y, 253, 4, self.star_color)
+        if self.frame_enabled:
+            center_x = self.star_data_list.max_x / 2 + MARGIN_X
+            center_y = self.star_data_list.max_y / 2 + MARGIN_Y
+            svg.circle2(center_x, center_y, 253, self.frame_width, self.frame_color)
 
         # add stars first
         for star_data in self.star_data_list.data:

@@ -23,6 +23,9 @@ class MainHandler(tornado.web.RequestHandler):
             mag_max,
             skyculture,
             color,
+            frame_enabled,
+            frame_width,
+            frame_color,
         ) = self.get_query_strings()
         new_catalog = converter.convert(date, lat, lon, elevation)
 
@@ -36,7 +39,15 @@ class MainHandler(tornado.web.RequestHandler):
         cc = CoordCalc(star_data_list, area, 500)
         cc.process()
 
-        d = Diagram(area, star_data_list, skyculture, color)
+        d = Diagram(
+            area,
+            star_data_list,
+            skyculture,
+            color,
+            frame_enabled,
+            frame_width,
+            frame_color,
+        )
         list(map(d.add_curve, cc.calc_curves()))
         svg_file = d.get_svg()
 
@@ -56,8 +67,23 @@ class MainHandler(tornado.web.RequestHandler):
         mag_max = int(self.get_argument("mag_max", 0, strip=True))
         skyculture = str(self.get_argument("skyculture", "western", strip=True))
         color = str(self.get_argument("color", "black", strip=True))
+        frame_enabled = self.get_argument("frame_enabled", "True", strip=True) == "True"
+        frame_width = int(self.get_argument("frame_width", 4, strip=True))
+        frame_color = str(self.get_argument("frame_color", "black", strip=True))
 
-        return date, lat, lon, elevation, mag_min, mag_max, skyculture, color
+        return (
+            date,
+            lat,
+            lon,
+            elevation,
+            mag_min,
+            mag_max,
+            skyculture,
+            color,
+            frame_enabled,
+            frame_width,
+            frame_color,
+        )
 
 
 def make_app():
