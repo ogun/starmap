@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Rammetto+One" rel="stylesheet">
+    <title>Starmap</title>
+</head>
+
+<body>
+    <table>
+        <tr>
+            <td>
+                <table>
+                    <tr>
+                        <td></td>
+                        <td><input type="button" onclick="javascript:render();" value="Update"></td>
+                    </tr>
+                    <tr>
+                        <td>Date</td>
+                        <td><input type="date" name="starmap-date" id="starmap-date" value="2020-01-01"></td>
+                    </tr>
+                    <tr>
+                        <td>BG Url</td>
+                        <td><input type="text" name="starmap-bg-url" id="starmap-bg-url" value="bg1.jpg"></td>
+                    </tr>
+                    <tr>
+                        <td>BG Color</td>
+                        <td><input type="text" name="starmap-bg-color" id="starmap-bg-color" value="#ffffff"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <hr />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Frame Enabled</td>
+                        <td><input type="text" name="frame-enabled" id="frame-enabled" value="True"></td>
+                    </tr>
+                    <tr>
+                        <td>Frame Color</td>
+                        <td><input type="text" name="frame-color" id="frame-color" value="#000000"></td>
+                    </tr>
+                    <tr>
+                        <td>Frame Width</td>
+                        <td><input type="text" name="frame-width" id="frame-width" value="5"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <hr />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Text1</td>
+                        <td><textarea type="text" name="text-1" id="text-1"></textarea></td>
+                    </tr>
+                    <tr>
+                        <td>Color</td>
+                        <td><input type="text" name="text-1-color" id="text-1-color"></td>
+                    </tr>
+                    <tr>
+                        <td>Size</td>
+                        <td><input type="text" name="text-1-size" id="text-1-size"></td>
+                    </tr>
+                    <tr>
+                        <td>Correction</td>
+                        <td><input type="text" name="text-1-correction" id="text-1-correction" value="0"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <hr />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Text2</td>
+                        <td><textarea type="text" name="text-2" id="text-2"></textarea></td>
+                    </tr>
+                    <tr>
+                        <td>Color</td>
+                        <td><input type="text" name="text-2-color" id="text-2-color"></td>
+                    </tr>
+                    <tr>
+                        <td>Size</td>
+                        <td><input type="text" name="text-2-size" id="text-2-size"></td>
+                    </tr>
+                    <tr>
+                        <td>Correction</td>
+                        <td><input type="text" name="text-2-correction" id="text-2-correction" value="0"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <hr />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Text3</td>
+                        <td><textarea type="text" name="text-3" id="text-3"></textarea></td>
+                    </tr>
+                    <tr>
+                        <td>Color</td>
+                        <td><input type="text" name="text-3-color" id="text-3-color"></td>
+                    </tr>
+                    <tr>
+                        <td>Size</td>
+                        <td><input type="text" name="text-3-size" id="text-3-size"></td>
+                    </tr>
+                    <tr>
+                        <td>Correction</td>
+                        <td><input type="text" name="text-3-correction" id="text-3-correction" value="0"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <hr />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Text4</td>
+                        <td><textarea type="text" name="text-4" id="text-4"></textarea></td>
+                    </tr>
+                    <tr>
+                        <td>Color</td>
+                        <td><input type="text" name="text-4-color" id="text-4-color"></td>
+                    </tr>
+                    <tr>
+                        <td>Size</td>
+                        <td><input type="text" name="text-4-size" id="text-4-size"></td>
+                    </tr>
+                    <tr>
+                        <td>Correction</td>
+                        <td><input type="text" name="text-4-correction" id="text-4-correction" value="0"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <hr />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Star Color</td>
+                        <td><input type="text" name="starmap-color" id="starmap-color" value="red"></td>
+                    </tr>
+                    <tr>
+                        <td>Elevation</td>
+                        <td><input type="number" name="starmap-elevation" id="starmap-elevation" value="0"></td>
+                    </tr>
+                    <tr>
+                        <td>Mag Min</td>
+                        <td><input type="number" name="starmap-mag_min" id="starmap-mag_min" value="9"></td>
+                    </tr>
+                    <tr>
+                        <td>Mag Max</td>
+                        <td><input type="number" name="starmap-mag_max" id="starmap-mag_max" value="0"></td>
+                    </tr>
+                    <tr>
+                        <td>Frame Enabled</td>
+                        <td><input type="text" name="starmap-frame_enabled" id="starmap-frame_enabled" value="True">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Frame Width</td>
+                        <td><input type="number" name="starmap-frame_width" id="starmap-frame_width" value="2"></td>
+                    </tr>
+                    <tr>
+                        <td>Frame Color</td>
+                        <td><input type="text" name="starmap-frame_color" id="starmap-frame_color" value="red"></td>
+                    </tr>
+                    <tr>
+                        <td>Sky Culture</td>
+                        <td><input type="text" name="starmap-skyculture" id="starmap-skyculture" value="western"></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><input type="button" onclick="javascript:render();" value="Update"></td>
+                    </tr>
+                </table>
+
+            </td>
+            <td><canvas width="2300" height="2300" id="sky-poster-230x230"></canvas></td>
+            <td><canvas width="3000" height="4000" id="sky-poster-300x400"></canvas></td>
+            <td><canvas width="4000" height="5000" id="sky-poster-400x500"></canvas></td>
+        </tr>
+    </table>
+
+
+    <style>
+        * {
+            vertical-align: top;
+        }
+
+        canvas {
+            border: 1px solid gray;
+        }
+
+        #sky-poster-230x230 { width: 230px; height: 230px; }
+        #sky-poster-300x400 { width: 300px; height: 400px; }
+        #sky-poster-400x500 { width: 400px; height: 500px; }
+    </style>
+    <script>
+        let starmapStorage = window.localStorage;
+
+        loadInputElements(starmapStorage);
+
+        function getStarmapUrl() {
+            let url = "https://the-sky-poster.oa.r.appspot.com/?";
+
+            let starmapColor = starmapStorage.getItem("starmap-color");
+            url += "&color=" + starmapColor.replace("#", "%23");
+
+            let starmapDate = starmapStorage.getItem("starmap-date");
+            url += "&date=" + starmapDate;
+
+            let starmapElevation = starmapStorage.getItem("starmap-elevation");
+            url += "&elevation=" + starmapElevation;
+
+            let starmapMagMin = starmapStorage.getItem("starmap-mag_min");
+            url += "&mag_min=" + starmapMagMin;
+
+            let starmapMagMax = starmapStorage.getItem("starmap-mag_max");
+            url += "&mag_max=" + starmapMagMax;
+
+            let starmapFrameEnabled = starmapStorage.getItem("starmap-frame_enabled");
+            url += "&frame_enabled=" + starmapFrameEnabled;
+
+            let starmapFrameWidth = starmapStorage.getItem("starmap-frame_width");
+            url += "&frame_width=" + starmapFrameWidth;
+
+            let starmapFrameColor = starmapStorage.getItem("starmap-frame_color");
+            url += "&frame_color=" + starmapFrameColor.replace("#", "%23");
+
+            let starmapSkyculture = starmapStorage.getItem("starmap-skyculture");
+            url += "&skyculture=" + starmapSkyculture;
+
+            console.log(url)
+            return url;
+        }
+
+        function saveInputElements(localStorage) {
+            let inputs = document.getElementsByTagName("input");
+            for (let index = 0; index < inputs.length; index++) {
+                const element = inputs[index];
+                localStorage.setItem(element.id, element.value);
+            }
+
+            let textareas = document.getElementsByTagName("textarea");
+            for (let index = 0; index < textareas.length; index++) {
+                const element = textareas[index];
+                localStorage.setItem(element.id, element.value);
+            }
+        }
+
+        function loadInputElements(localStorage) {
+            let inputs = document.getElementsByTagName("input");
+            for (let index = 0; index < inputs.length; index++) {
+                const element = inputs[index];
+                element.value = localStorage.getItem(element.id) || element.value;
+            }
+
+            let textareas = document.getElementsByTagName("textarea");
+            for (let index = 0; index < textareas.length; index++) {
+                const element = textareas[index];
+                element.value = localStorage.getItem(element.id) || element.value;
+            }
+        }
+
+        function setText(ctx, width, height, id, y) {
+            let f = new FontFace('Rammetto One', "url('https://fonts.gstatic.com/s/rammettoone/v9/LhWiMV3HOfMbMetJG3lQDppNO_Gduu8.woff2')");
+            f.load().then(function () {
+                const text = starmapStorage.getItem(id);
+                const color = starmapStorage.getItem(id + "-color");
+                const size = starmapStorage.getItem(id + "-size");
+                const correction = Number(starmapStorage.getItem(id + "-correction"));
+
+
+                ctx.fillStyle = color;
+                ctx.font = size + "px Rammetto One";
+
+                ctx.textAlign = 'center';
+
+                const lines = text.split('\n')
+                const dy = y + (width * correction)
+                for (let index = 0; index < lines.length; index++) {
+                    const line = lines[index];
+                    ctx.fillText(line, (width / 2), dy + (Number(size) * index));
+                }
+            });
+
+        }
+
+        function render() {
+            saveInputElements(starmapStorage);
+            renderCanvas('sky-poster-230x230', .8, {"text-1": .8, "text-2": .85, "text-3": .9, "text-4": .95});
+            renderCanvas('sky-poster-300x400', 1,  {"text-1": .75, "text-2": .81, "text-3": .87, "text-4": .93});
+            renderCanvas('sky-poster-400x500', 1,  {"text-1": .79, "text-2": .84, "text-3": .89, "text-4": .94});
+        }
+
+        function renderCanvas(canvasId, imageRatio, texts) {
+            let cnvs = document.getElementById(canvasId);
+
+            let width = cnvs.width;
+            let height = cnvs.height;
+
+            let ctx = cnvs.getContext('2d');
+            ctx.clearRect(0, 0, width, height);
+
+            drawSolidBackground(ctx, width, height);
+            drawBackgroundImage(ctx, width, height, imageRatio, texts);
+        }
+
+        function drawPosterElements(ctx, width, height, texts) {
+            drawPosterFrame(ctx, width, height);
+            drawPosterTexts(ctx, width, height, texts);
+        }
+
+        function drawPosterTexts(ctx, width, height, texts) {
+            for (const key in texts) {
+                if (texts.hasOwnProperty(key)) {
+                    const y = texts[key];
+                    setText(ctx, width, height, key, height * y);
+                }
+            }
+        }
+
+        function drawSolidBackground(ctx, width, height) {
+            const bgColor = starmapStorage.getItem("starmap-bg-color");
+
+            ctx.fillStyle = bgColor;
+            ctx.fillRect(0, 0, width, height);
+        }
+
+        function drawPosterFrame(ctx, width, height) {
+            const frameEnabled = starmapStorage.getItem("frame-enabled") == "True"
+            if (!frameEnabled) {
+                return
+            }
+            const frameColor = starmapStorage.getItem("frame-color");
+            const frameWidth = Number(starmapStorage.getItem("frame-width"));
+            const frameMargin = .02
+
+            ctx.strokeStyle = frameColor;
+            ctx.lineWidth = frameWidth;
+            ctx.strokeRect(width * frameMargin, height * frameMargin, width * (1 - (2 * frameMargin)), height * (1 - (2 * frameMargin)));
+        }
+
+        function drawBackgroundImage(ctx, width, height, imageRatio=1, texts={}) {
+            var img = new Image();
+            img.onload = function () {
+                const marginPercentage = .01;
+                const scaledWidth = width * imageRatio;
+
+                const dx = (width - scaledWidth) / 2
+                const dy = width * marginPercentage
+
+                ctx.drawImage(img, dx, dy, scaledWidth, scaledWidth);
+
+                drawStarmapImage(ctx, width, height, imageRatio, texts);
+            }
+
+            const bgImg = starmapStorage.getItem("starmap-bg-url");
+            img.src = bgImg;
+        }
+
+        function drawStarmapImage(ctx, width, height, imageRatio=1, texts={}) {
+            var img = new Image();
+            img.onload = function () {
+                const marginPercentage = .01;
+                const scaledWidth = width * imageRatio;
+
+                const dx = (width - scaledWidth) / 2
+                const dy = width * marginPercentage
+
+                ctx.drawImage(img, dx, dy, scaledWidth, scaledWidth);
+
+                drawPosterElements(ctx, width, height, texts);
+            }
+            img.src = getStarmapUrl();
+        }
+    </script>
+</body>
+
+</html>
