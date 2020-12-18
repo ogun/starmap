@@ -28,12 +28,17 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>Date</td>
-                        <td><input type="datetime-local" name="starmap-date" id="starmap-date" value="2020-01-01"></td>
+                        <td colspan="2">
+                            <hr />
+                        </td>
                     </tr>
                     <tr>
                         <td>BG Color</td>
                         <td><input type="text" name="starmap-bg-color" id="starmap-bg-color" value="#ffffff"></td>
+                    </tr>
+                    <tr>
+                        <td>SVG Stars</td>
+                        <td><input type="text" name="starmap-bg-svg" id="starmap-bg-svg" value=""></td>
                     </tr>
                     <tr>
                         <td colspan="2">
@@ -167,6 +172,10 @@
                         <td colspan="2">
                             <hr />
                         </td>
+                    </tr>
+                    <tr>
+                        <td>Date</td>
+                        <td><input type="datetime-local" name="starmap-date" id="starmap-date" value="2020-01-01"></td>
                     </tr>
                     <tr>
                         <td>Sehirler</td>
@@ -472,9 +481,9 @@
 
         function render() {
             saveInputElements(starmapStorage);
-            renderCanvas('sky-poster-230x230', .8, { "text-1": .8, "text-2": .85, "text-3": .9, "text-4": .95, "bg-img-ratio": 0.835 });
-            renderCanvas('sky-poster-300x400', 1, { "text-1": .75, "text-2": .81, "text-3": .87, "text-4": .93, "bg-img-ratio": 0.835 });
-            renderCanvas('sky-poster-400x500', 1, { "text-1": .79, "text-2": .84, "text-3": .89, "text-4": .94, "bg-img-ratio": 0.835 });
+            renderCanvas('sky-poster-230x230', .7, { "text-1": .8, "text-2": .85, "text-3": .9, "text-4": .95, "bg-img-ratio": 1 });
+            renderCanvas('sky-poster-300x400', .9, { "text-1": .75, "text-2": .81, "text-3": .87, "text-4": .93, "bg-img-ratio": 1 });
+            renderCanvas('sky-poster-400x500', .9, { "text-1": .79, "text-2": .84, "text-3": .89, "text-4": .94, "bg-img-ratio": 1 });
         }
 
         function renderCanvas(canvasId, imageRatio, options) {
@@ -538,7 +547,7 @@
 
             var img = new Image();
             img.onload = function () {
-                const marginPercentage = .01;
+                const marginPercentage = .06;
                 const imageCorrection = Number(starmapStorage.getItem("starmap-bg-correction"));
                 const imageCorrectionX = Number(starmapStorage.getItem("starmap-bg-correction-x"));
                 const imageCorrectionY = Number(starmapStorage.getItem("starmap-bg-correction-y"));
@@ -563,7 +572,7 @@
         function drawStarmapImage(ctx, width, height, imageRatio = 1, options = {}) {
             var img = new Image();
             img.onload = function () {
-                const marginPercentage = .01;
+                const marginPercentage = .06;
                 const imageCorrection = Number(starmapStorage.getItem("starmap-correction"));
                 const imageCorrectionX = Number(starmapStorage.getItem("starmap-correction-x"));
                 const imageCorrectionY = Number(starmapStorage.getItem("starmap-correction-y"));
@@ -577,7 +586,13 @@
 
                 drawPosterElements(ctx, width, height, options);
             }
-            img.src = getStarmapUrl();
+
+            let bgSvg = starmapStorage.getItem("starmap-bg-svg");
+            if (bgSvg != "") {
+                img.src = bgSvg;
+            } else {
+                img.src = getStarmapUrl();
+            }
         }
     </script>
 </body>
