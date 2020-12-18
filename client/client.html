@@ -507,6 +507,12 @@
         }
 
         function drawBackgroundImage(ctx, width, height, imageRatio = 1, texts = {}) {
+            const bgImg = starmapStorage.getItem("starmap-bg-url");
+            if (bgImg == "") {
+                drawStarmapImage(ctx, width, height, imageRatio, texts);
+                return;
+            }
+
             var img = new Image();
             img.onload = function () {
                 const marginPercentage = .01;
@@ -523,8 +529,6 @@
 
                 drawStarmapImage(ctx, width, height, imageRatio, texts);
             }
-
-            const bgImg = starmapStorage.getItem("starmap-bg-url");
             img.src = bgImg;
         }
 
