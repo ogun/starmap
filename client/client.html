@@ -18,6 +18,16 @@
                         <td><input type="button" onclick="javascript:render();" value="Update"></td>
                     </tr>
                     <tr>
+                        <td>Boyut</td>
+                        <td>
+                            <select name="starmap-size" id="starmap-size" onchange="javascript:selectSize();">
+                                <option value="sky-poster-230x230" selected="selected">230x230</option>
+                                <option value="sky-poster-300x400">300x400</option>
+                                <option value="sky-poster-400x500">400x500</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
                         <td>Date</td>
                         <td><input type="datetime-local" name="starmap-date" id="starmap-date" value="2020-01-01"></td>
                     </tr>
@@ -308,8 +318,8 @@
 
             </td>
             <td><canvas width="2300" height="2300" id="sky-poster-230x230"></canvas></td>
-            <td><canvas width="3000" height="4000" id="sky-poster-300x400"></canvas></td>
-            <td><canvas width="4000" height="5000" id="sky-poster-400x500"></canvas></td>
+            <td><canvas width="3000" height="4000" id="sky-poster-300x400" style="display: none;"></canvas></td>
+            <td><canvas width="4000" height="5000" id="sky-poster-400x500" style="display: none;"></canvas></td>
         </tr>
     </table>
 
@@ -324,18 +334,18 @@
         }
 
         #sky-poster-230x230 {
-            width: 230px;
-            height: 230px;
+            width: 460px;
+            height: 460px;
         }
 
         #sky-poster-300x400 {
-            width: 300px;
-            height: 400px;
+            width: 600px;
+            height: 800px;
         }
 
         #sky-poster-400x500 {
-            width: 400px;
-            height: 500px;
+            width: 800px;
+            height: 1000px;
         }
     </style>
     <script>
@@ -383,6 +393,15 @@
             return url;
         }
 
+        function selectSize() {
+            document.getElementById("sky-poster-230x230").style.display = "none";
+            document.getElementById("sky-poster-300x400").style.display = "none";
+            document.getElementById("sky-poster-400x500").style.display = "none";
+
+            let activeSize = document.getElementById("starmap-size");
+            document.getElementById(activeSize.value).style.display = "block";
+        }
+
         function selectCity() {
             let cityElement = document.getElementById("starmap-cities");
             let cityValue = cityElement.value;
@@ -403,6 +422,7 @@
             for (let index = 0; index < inputs.length; index++) {
                 const element = inputs[index];
                 localStorage.setItem(element.id, element.value);
+                console.log(element.id, element.value)
             }
 
             let textareas = document.getElementsByTagName("textarea");
@@ -452,12 +472,12 @@
 
         function render() {
             saveInputElements(starmapStorage);
-            renderCanvas('sky-poster-230x230', .8, { "text-1": .8, "text-2": .85, "text-3": .9, "text-4": .95 });
-            renderCanvas('sky-poster-300x400', 1, { "text-1": .75, "text-2": .81, "text-3": .87, "text-4": .93 });
-            renderCanvas('sky-poster-400x500', 1, { "text-1": .79, "text-2": .84, "text-3": .89, "text-4": .94 });
+            renderCanvas('sky-poster-230x230', .8, { "text-1": .8, "text-2": .85, "text-3": .9, "text-4": .95, "bg-img-ratio": 0.96 });
+            renderCanvas('sky-poster-300x400', 1, { "text-1": .75, "text-2": .81, "text-3": .87, "text-4": .93, "bg-img-ratio": 0.935 });
+            renderCanvas('sky-poster-400x500', 1, { "text-1": .79, "text-2": .84, "text-3": .89, "text-4": .94, "bg-img-ratio": 0.935 });
         }
 
-        function renderCanvas(canvasId, imageRatio, texts) {
+        function renderCanvas(canvasId, imageRatio, options) {
             let cnvs = document.getElementById(canvasId);
 
             let width = cnvs.width;
@@ -467,18 +487,21 @@
             ctx.clearRect(0, 0, width, height);
 
             drawSolidBackground(ctx, width, height);
-            drawBackgroundImage(ctx, width, height, imageRatio, texts);
+            drawBackgroundImage(ctx, width, height, imageRatio, options);
         }
 
-        function drawPosterElements(ctx, width, height, texts) {
+        function drawPosterElements(ctx, width, height, options) {
             drawPosterFrame(ctx, width, height);
-            drawPosterTexts(ctx, width, height, texts);
+            drawPosterTexts(ctx, width, height, options);
         }
 
-        function drawPosterTexts(ctx, width, height, texts) {
-            for (const key in texts) {
-                if (texts.hasOwnProperty(key)) {
-                    const y = texts[key];
+        function drawPosterTexts(ctx, width, height, options) {
+            for (const key in options) {
+                if (options.hasOwnProperty(key)) {
+                    const y = options[key];
+                    if (!key.startsWith("text-")) {
+                        continue;
+                    }
                     setText(ctx, width, height, key, height * y);
                 }
             }
@@ -506,10 +529,10 @@
             ctx.strokeRect(width * frameMargin, height * frameMargin, width * (1 - (2 * frameMargin)), height * (1 - (2 * frameMargin)));
         }
 
-        function drawBackgroundImage(ctx, width, height, imageRatio = 1, texts = {}) {
+        function drawBackgroundImage(ctx, width, height, imageRatio = 1, options = {}) {
             const bgImg = starmapStorage.getItem("starmap-bg-url");
             if (bgImg == "") {
-                drawStarmapImage(ctx, width, height, imageRatio, texts);
+                drawStarmapImage(ctx, width, height, imageRatio, options);
                 return;
             }
 
@@ -520,19 +543,24 @@
                 const imageCorrectionX = Number(starmapStorage.getItem("starmap-bg-correction-x"));
                 const imageCorrectionY = Number(starmapStorage.getItem("starmap-bg-correction-y"));
 
+                let imageFixRatio = 1;
+                if (options.hasOwnProperty("bg-img-ratio")) {
+                    imageFixRatio = options["bg-img-ratio"];
+                }
                 const scaledWidth = (width * imageRatio) + (width * imageCorrection);
+                const fixedWidth = (width * imageRatio * imageFixRatio) + (width * imageCorrection);
 
-                const dx = ((width - scaledWidth) / 2) + (width * imageCorrectionX)
-                const dy = width * marginPercentage + (width * imageCorrectionY)
+                const dx = ((width - scaledWidth) / 2) + (width * imageCorrectionX) + (scaledWidth - fixedWidth) / 2
+                const dy = width * marginPercentage + (width * imageCorrectionY) + (scaledWidth - fixedWidth) / 2
 
-                ctx.drawImage(img, dx, dy, scaledWidth, scaledWidth);
+                ctx.drawImage(img, dx, dy, fixedWidth, fixedWidth);
 
-                drawStarmapImage(ctx, width, height, imageRatio, texts);
+                drawStarmapImage(ctx, width, height, imageRatio, options);
             }
             img.src = bgImg;
         }
 
-        function drawStarmapImage(ctx, width, height, imageRatio = 1, texts = {}) {
+        function drawStarmapImage(ctx, width, height, imageRatio = 1, options = {}) {
             var img = new Image();
             img.onload = function () {
                 const marginPercentage = .01;
@@ -547,7 +575,7 @@
 
                 ctx.drawImage(img, dx, dy, scaledWidth, scaledWidth);
 
-                drawPosterElements(ctx, width, height, texts);
+                drawPosterElements(ctx, width, height, options);
             }
             img.src = getStarmapUrl();
         }
