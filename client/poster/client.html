@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css?family=Rammetto+One" rel="stylesheet">
     <title>Starmap</title>
 </head>
 
@@ -106,6 +105,18 @@
                         <td><input type="text" name="text-1-correction" id="text-1-correction" value="0"></td>
                     </tr>
                     <tr>
+                        <td>Font URL</td>
+                        <td><input type="text" name="text-1-font-url" id="text-1-font-url"></td>
+                    </tr>
+                    <tr>
+                        <td>Font Name</td>
+                        <td><input type="text" name="text-1-font-name" id="text-1-font-name"></td>
+                    </tr>
+                    <tr>
+                        <td>Font Latin-Ext Woff2</td>
+                        <td><input type="text" name="text-1-font-woff" id="text-1-font-woff"></td>
+                    </tr>
+                    <tr>
                         <td colspan="2">
                             <hr />
                         </td>
@@ -125,6 +136,18 @@
                     <tr>
                         <td>Correction</td>
                         <td><input type="text" name="text-2-correction" id="text-2-correction" value="0"></td>
+                    </tr>
+                    <tr>
+                        <td>Font URL</td>
+                        <td><input type="text" name="text-2-font-url" id="text-2-font-url"></td>
+                    </tr>
+                    <tr>
+                        <td>Font Name</td>
+                        <td><input type="text" name="text-2-font-name" id="text-2-font-name"></td>
+                    </tr>
+                    <tr>
+                        <td>Font Latin-Ext Woff2</td>
+                        <td><input type="text" name="text-2-font-woff" id="text-2-font-woff"></td>
                     </tr>
                     <tr>
                         <td colspan="2">
@@ -148,6 +171,18 @@
                         <td><input type="text" name="text-3-correction" id="text-3-correction" value="0"></td>
                     </tr>
                     <tr>
+                        <td>Font URL</td>
+                        <td><input type="text" name="text-3-font-url" id="text-3-font-url"></td>
+                    </tr>
+                    <tr>
+                        <td>Font Name</td>
+                        <td><input type="text" name="text-3-font-name" id="text-3-font-name"></td>
+                    </tr>
+                    <tr>
+                        <td>Font Latin-Ext Woff2</td>
+                        <td><input type="text" name="text-3-font-woff" id="text-3-font-woff"></td>
+                    </tr>
+                    <tr>
                         <td colspan="2">
                             <hr />
                         </td>
@@ -167,6 +202,18 @@
                     <tr>
                         <td>Correction</td>
                         <td><input type="text" name="text-4-correction" id="text-4-correction" value="0"></td>
+                    </tr>
+                    <tr>
+                        <td>Font URL</td>
+                        <td><input type="text" name="text-4-font-url" id="text-4-font-url"></td>
+                    </tr>
+                    <tr>
+                        <td>Font Name</td>
+                        <td><input type="text" name="text-4-font-name" id="text-4-font-name"></td>
+                    </tr>
+                    <tr>
+                        <td>Font Latin-Ext Woff2</td>
+                        <td><input type="text" name="text-4-font-woff" id="text-4-font-woff"></td>
                     </tr>
                     <tr>
                         <td colspan="2">
@@ -398,7 +445,6 @@
             let starmapSkyculture = starmapStorage.getItem("starmap-skyculture");
             url += "&skyculture=" + starmapSkyculture;
 
-            console.log(url)
             return url;
         }
 
@@ -431,7 +477,6 @@
             for (let index = 0; index < inputs.length; index++) {
                 const element = inputs[index];
                 localStorage.setItem(element.id, element.value);
-                console.log(element.id, element.value)
             }
 
             let textareas = document.getElementsByTagName("textarea");
@@ -455,18 +500,41 @@
             }
         }
 
+        function addCss(fileName) {
+            var head = document.head;
+            var link = document.createElement("link");
+
+            link.rel = "stylesheet";
+            link.href = fileName;
+
+            head.appendChild(link);
+        }
+
         function setText(ctx, width, height, id, y) {
-            let f = new FontFace('Rammetto One', "url('https://fonts.gstatic.com/s/rammettoone/v9/LhWiMV3HOfMbMetJG3lQDppNO_Gduu8.woff2')");
+            let url = "https://fonts.googleapis.com/css?family=Rammetto+One"
+            let name = 'Rammetto One';
+            let woff = "https://fonts.gstatic.com/s/rammettoone/v9/LhWiMV3HOfMbMetJG3lQDppNO_Gduu8.woff2";
+
+            const fontUrl = starmapStorage.getItem(id + "-font-url");
+            if (fontUrl != "") {
+                const fontName = starmapStorage.getItem(id + "-font-name");
+                const fontWoff = starmapStorage.getItem(id + "-font-woff");
+
+                url = fontUrl;
+                name = fontName;
+                woff = fontWoff;
+            }
+
+            addCss(url);
+            let f = new FontFace(name, "url('" + woff + "')");
             f.load().then(function () {
                 const text = starmapStorage.getItem(id);
                 const color = starmapStorage.getItem(id + "-color");
                 const size = starmapStorage.getItem(id + "-size");
                 const correction = Number(starmapStorage.getItem(id + "-correction"));
 
-
                 ctx.fillStyle = color;
-                ctx.font = size + "px Rammetto One";
-
+                ctx.font = size + "px " + name;
                 ctx.textAlign = 'center';
 
                 const lines = text.split('\n')
